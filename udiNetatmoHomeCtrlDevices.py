@@ -23,6 +23,80 @@ except ImportError:
 
 #from nodes.controller import Controller
 #from udi_interface import logging, Custom, Interface
+class udiNetatmoOutlet(udi_interface.Node):
+    from udiNetatmoLib import bool2ISY, t_mode2ISY, update_ISY_data, node_queue, wait_for_node_done, battery2ISY, con_state2ISY
+
+    def __init__(self, polyglot, primary, address, name, myNetatmo, home,  valve_id):
+        super().__init__(polyglot, primary, address, name)
+        self.poly = polyglot
+        self.myNetatmo= myNetatmo
+        self.valve_id = valve_id
+        self.home_id = home['id']
+        self._home = home
+        self.primary = primary
+        self.address = address
+        self.name = name        
+        self.n_queue = []
+        self.id = 'outlet'
+        self.drivers = [
+
+            {'driver' : 'GV0', 'value': 99,  'uom':25}, 
+            {'driver' : 'GV2', 'value': 99,  'uom':25}, 
+            {'driver' : 'GV1', 'value': 99,  'uom':25},       
+            {'driver' : 'ST', 'value': 99,  'uom':25}, 
+            ]
+
+        self.node_ready = False
+        self.poly.subscribe(self.poly.START, self.start, address)
+        #self.poly.subscribe(self.poly.STOP, self.stop)
+        self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
+        self.poly.ready()
+        self.poly.addNode(self)
+        self.wait_for_node_done()
+        self.node = self.poly.getNode(address)
+        logging.info('Start {} valve Node'.format(self.name))  
+        time.sleep(1)
+        self.n_queue = []  
+        self.nodeDefineDone = True
+        self.node_ready = True
+
+class udiNetatmoRemote(udi_interface.Node):
+    from udiNetatmoLib import bool2ISY, t_mode2ISY, update_ISY_data, node_queue, wait_for_node_done, battery2ISY, con_state2ISY
+
+    def __init__(self, polyglot, primary, address, name, myNetatmo, home,  valve_id):
+        super().__init__(polyglot, primary, address, name)
+        self.poly = polyglot
+        self.myNetatmo= myNetatmo
+        self.valve_id = valve_id
+        self.home_id = home['id']
+        self._home = home
+        self.primary = primary
+        self.address = address
+        self.name = name        
+        self.n_queue = []
+        self.id = 'remote'
+        self.drivers = [
+
+            {'driver' : 'GV0', 'value': 99,  'uom':25}, 
+            {'driver' : 'GV2', 'value': 99,  'uom':25}, 
+            {'driver' : 'GV1', 'value': 99,  'uom':25},       
+            {'driver' : 'ST', 'value': 99,  'uom':25}, 
+            ]
+
+        self.node_ready = False
+        self.poly.subscribe(self.poly.START, self.start, address)
+        #self.poly.subscribe(self.poly.STOP, self.stop)
+        self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
+        self.poly.ready()
+        self.poly.addNode(self)
+        self.wait_for_node_done()
+        self.node = self.poly.getNode(address)
+        logging.info('Start {} valve Node'.format(self.name))  
+        time.sleep(1)
+        self.n_queue = []  
+        self.nodeDefineDone = True
+        self.node_ready = True
+
 
 
 class udiNetatmoSwitch(udi_interface.Node):
@@ -39,7 +113,7 @@ class udiNetatmoSwitch(udi_interface.Node):
         self.address = address
         self.name = name        
         self.n_queue = []
-        self.id = 'valve'
+        self.id = 'switch'
         self.drivers = [
 
             {'driver' : 'GV0', 'value': 99,  'uom':25}, 

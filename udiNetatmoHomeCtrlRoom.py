@@ -19,7 +19,7 @@ except ImportError:
     logging.basicConfig(level=logging.DEBUG)
 
 
-from udiNetatmoHomeCtrlDevices import udiNetatmoSwitch
+from udiNetatmoHomeCtrlDevices import udiNetatmoSwitch, udiNetatmoOutlet, udiNetatmoRemote
 
 
 #from udi_interface import logging, Custom, Interface

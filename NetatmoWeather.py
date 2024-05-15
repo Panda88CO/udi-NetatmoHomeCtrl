@@ -266,20 +266,20 @@ class NetatmoWeather (NetatmoCloud):
             logging.debug('merge_data complete {}'.format(self.weather_data))
         except Exception as E:
             logging.error('Exception merging data: {} - {}: {} {}'.format(E, self.weather_data, self.instant_data,self.cloud_data  ))
-            
-    def get_homes(self):
-        '''get_homes'''
+    
+    def get_weather_info(self):
+        logging.debug('get_weather_info')
+        api_str = '/getstationsdata'
+        res = self._callApi('GET', api_str )
+        logging.debug(res)
 
-        tmp = self.get_homes_info()
-        self.weather_in_homes = {}
-        for home_id in tmp:
-            found = False
-            for mod_type in tmp[home_id]['module_types']:
-                if mod_type in  self._dev_list:
-                    found = True
-            if found:
-                self.weather_in_homes[home_id] = tmp[home_id]
-        return(self.weather_in_homes)
+    def get_weather_info2(self):
+        logging.debug('get_weather_info')
+        api_str = '/homestatus'
+        res = self._callApi('GET', api_str )
+        logging.debug(res)
+   
+
 
     def get_main_modules(self, home_id):
         '''get_main_modules '''
@@ -345,7 +345,7 @@ class NetatmoWeather (NetatmoCloud):
         #data_list = ['wind_strength', 'wind_angle', 'wind+gust', 'wind_gust_angle', 'last_seen', 'battery_state', 'ts']
         return(self._get_weather_data(home_id, dev_id, 'WIND'))
     '''
-
+    '''
     def get_temperature_C(self, module):
         try:
             logging.debug('get_temperature_C {} {} {} {}'.format(self.weather_data[module['home_id']][module['type']][module['module_id']]['temperature'],module['home_id'], module['type'], module['module_id'] ))
@@ -553,5 +553,5 @@ class NetatmoWeather (NetatmoCloud):
         except Exception as e:
             logging.warning('No online data exists - Assume off line : {} - {}'.format(e, module))
             return(False)
-
+    '''
 

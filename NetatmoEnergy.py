@@ -168,7 +168,7 @@ class NetatmoEnergy(NetatmoCloud):
         #data_list = ['wind_strength', 'wind_angle', 'wind+gust', 'wind_gust_angle', 'last_seen', 'battery_state', 'ts']
         return(self._get_energy_data(home_id, dev_id, 'WIND'))
     '''
-
+    '''
     def get_temperature_C(self, module):
         try:
             logging.debug('get_temperature_C {} {} {} {}'.format(self.energy_data[module['home_id']][module['type']][module['module_id']]['temperature'],module['home_id'], module['type'], module['module_id'] ))
@@ -377,4 +377,4 @@ class NetatmoEnergy(NetatmoCloud):
             logging.warning('No online data exists - Assume off line : {} - {}'.format(e, module))
             return(False)
 
-
+    '''

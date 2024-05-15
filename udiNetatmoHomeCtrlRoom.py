@@ -57,6 +57,8 @@ class udiNetatmoHomeCtrlRoom(udi_interface.Node):
         self.address = address
         self.name = name
 
+
+        self.gateways = ['']
         #self.myNetatmo = NetatmoWeather
         #self.home_id = module_info['home']
         #self.main_module_id = module_info['main_module']

@@ -258,7 +258,6 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
 
 
 
-
     def isControlDevice(self, home, module_address):
         if 'modules' in home:
             for mod_idx, mod_info in enumerate(home['modules']):

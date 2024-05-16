@@ -252,7 +252,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
                     if module['type'] in self._dev_list:
                         found = True
                 if found:
-                    self.homes_w_ctrl[home_id] = home_dict[home_id]
+                    homes_w_ctrl[home_id] = home_dict[home_id]
         logging.debug('homes_w_ctrl {}'.format(homes_w_ctrl))
         return(homes_w_ctrl)
 

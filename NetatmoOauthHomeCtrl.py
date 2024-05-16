@@ -64,7 +64,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
 
 
         self._dev_list  = self.power_list+self.lights_list+self.remotes_list
-
+        logging.debug('_dev_list: {}'.format(self._dev_list))
         #self.customParameters= Custom(polyglot, 'customparams')
         #self.Notices = Custom(self.poly, 'notices')
 
@@ -349,6 +349,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
             logging.debug('get_homectrl_homes: {}'.format(home))
             if 'modules' in home:   
                 for module in home['modules']:
+                    logging.debug('Module : {}'.format(module))
                     if module['type'] in self._dev_list:
                         found = True
                 if found:

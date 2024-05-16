@@ -116,12 +116,12 @@ class NetatmoController(udi_interface.Node):
         time.sleep(1)
         self.poly.Notices.clear()    
 
-        self.homes_dict = self.myNetatmo.get_homectrl_homes()
+        homes_dict = self.myNetatmo.get_homectrl_homes()
         if self.homes_dict:
             self.node.setDriver('ST', 1, True, True)
-        logging.debug('Home ids: {}'.format(self.homes_dict))
+        logging.debug('Home ids: {}'.format(homes_dict))
 
-        for home_id in self.homes_dict:
+        for home_id, home in homes_dict.items:
             logging.debug('home-id, home {} - {}'.format(home_id, home))
             if home['name'] not in self.myNetatmo.customParameters:
                 self.myNetatmo.customParameters[home['name']] = 1
@@ -152,7 +152,6 @@ class NetatmoController(udi_interface.Node):
         #primary_gateway_list = ['NAPlug'] # controller is there for sure 
         primary_node_list = [self.id]
         for indx, home  in enumerate(self.home_list):
-            home = self.home_list[indx]
             logging.debug('Adding energy rooms  {}'.format(home))
             home_name = self.poly.getValidName(home['name'])
             if 'rooms' in home:

@@ -121,7 +121,7 @@ class NetatmoController(udi_interface.Node):
             self.node.setDriver('ST', 1, True, True)
         logging.debug('Home ids: {}'.format(homes_dict))
 
-        for home_id, home in homes_dict.items:
+        for home_id, home in homes_dict.items():
             logging.debug('home-id, home {} - {}'.format(home_id, home))
             if home['name'] not in self.myNetatmo.customParameters:
                 self.myNetatmo.customParameters[home['name']] = 1

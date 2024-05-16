@@ -47,7 +47,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         self.customNsHandlerDone = False
         self.temp_unit = 'C'
 
-        self.scopeList = [ 'read_magellan', 'write_magellan', 'read_smarther', 'write_smarther', 'read_mhs1', 'write_mhs1']
+        self.scopeList = [ 'read_magellan', 'write_magellan', 'read_smarther', 'write_smarther', 'read_mhs1', 'write_mhs1', 'read_thermostat', 'write_thermostat']
         
         self._dev_list  = ['NAPlug', 'NRV', 'NATherm1']
 

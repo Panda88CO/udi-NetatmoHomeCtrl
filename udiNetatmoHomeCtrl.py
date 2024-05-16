@@ -116,14 +116,13 @@ class NetatmoController(udi_interface.Node):
         time.sleep(1)
         self.poly.Notices.clear()    
 
-        self.home_ids = self.myNetatmo.get_homectrl_homes()
-        if self.home_ids:
+        self.homes_dict = self.myNetatmo.get_homectrl_homes()
+        if self.homes_dict:
             self.node.setDriver('ST', 1, True, True)
-        logging.debug('Home ids: {}'.format(self.home_ids))
+        logging.debug('Home ids: {}'.format(self.homes_dict))
 
-        for home_id, home in self.home_ids.items():
-            logging.debug('home-id {}'.format(home_id))
-            logging.debug('home {}'.format(home))
+        for home_id in self.homes_dict:
+            logging.debug('home-id, home {} - {}'.format(home_id, home))
             if home['name'] not in self.myNetatmo.customParameters:
                 self.myNetatmo.customParameters[home['name']] = 1
                 self.home_list.append(home)
@@ -140,8 +139,8 @@ class NetatmoController(udi_interface.Node):
             logging.info('Waiting for configuration to complete')
             time.sleep(1)
         #update data
-        for home in self.home_list:
-            self.myNetatmo.get_home_status(home['id'])
+        for home_id in self.home_list:
+            self.myNetatmo.get_home_status(home_id)
         self.addNodes()
         self.wait_for_node_done()
 

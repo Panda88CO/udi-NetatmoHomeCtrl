@@ -382,9 +382,8 @@ class NetatmoCloud(OAuth):
     #    self.temp_unit = value
     def process_homes_data(self, net_system):
         homes_list = {}
-        for home in range(0, len(net_system['homes'])):
-            tmp = net_system['homes'][home]
-            homes_list[tmp['id']]= tmp
+        for home_idx, home in enumerate(net_system['homes']):
+            homes_list[home['id']]= home
         logging.debug('homes list: {}'.format(homes_list))
         return(homes_list)
 
@@ -395,7 +394,7 @@ class NetatmoCloud(OAuth):
         api_str = '/homesdata'
         temp = self._callApi('GET', api_str )
         self.netatmo_systems = temp['body']
-        logging.debug(self.netatmo_systems)
+        logging.debug(' Netatmo API data :{}'.format(self.netatmo_systems))
         self.homes_list = self.process_homes_data(self.netatmo_systems)
         return(self.homes_list)
 

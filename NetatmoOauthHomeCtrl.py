@@ -240,22 +240,21 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
 
 
     def get_homectrl_homes(self):
-        home_list = self.get_homes_info()
-        logging.debug('get_homectrl_homes : {}'.format(home_list))
-        self.ctrl_in_homes = {}
-        for home_id, home in home_list.items():
+        home_dict = self.get_homes_info()
+        logging.debug('get_homectrl_homes : {}'.format(home_dict))
+        homes_w_ctrl = {}
+        for home_id, home in home_dict.items():
             found = False
-            home = home_list[home_id]
-            logging.debug('get_homectrl_homes: {}'.format(home))
+            logging.debug('Home: {}'.format(home))
             if 'modules' in home:  
                 for module in home['modules']:
                     logging.debug('Module : {}'.format(module))
-                    if home['modules'][module]['type'] in self._dev_list:
+                    if module['type'] in self._dev_list:
                         found = True
                 if found:
-                    self.ctrl_in_homes[home_id] = home
-        logging.debug('self.ctrl_in_homes {}'.format(self.ctrl_in_homes))
-        return(self.ctrl_in_homes)
+                    self.homes_w_ctrl[home_id] = home_dict[home_id]
+        logging.debug('homes_w_ctrl {}'.format(homes_w_ctrl))
+        return(homes_w_ctrl)
 
 
     '''
@@ -361,7 +360,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
 
         home_list = self.get_homes_info()
         logging.debug('get_homectrl_homes : {}'.format(home_list))
-        self.ctrl_in_homes = {}
+        self.homes_w_ctrl = {}
         for home_id, home in home_list.items():
             found = False
             home = home_list[home_id]
@@ -372,9 +371,9 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
                     if home['modules'][module]['type'] in self._dev_list:
                         found = True
                 if found:
-                    self.ctrl_in_homes[home_id] = home
-        logging.debug('self.ctrl_in_homes {}'.format(self.ctrl_in_homes))
-        return(self.ctrl_in_homes)
+                    self.homes_w_ctrl[home_id] = home
+        logging.debug('self.homes_w_ctrl {}'.format(self.homes_w_ctrl))
+        return(self.homes_w_ctrl)
 
     def get_GW_modules(self, home_id):
         

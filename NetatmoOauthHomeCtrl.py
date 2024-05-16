@@ -227,7 +227,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         #logging.debug('execute_set_setpoint return: {} - {}'.format(api_str, temp))
         return(temp)
 
-#POST "https://api.netatmo.com/api/setthermmode?home_id=12345&mode=away&endtime=12345"
+
     def execute_set_mode(self, home_id, mode, t_stop=0):
         logging.debug('execute_set_mode {} {}'.format( mode, t_stop))
         home_id_str = urllib.parse.quote_plus(home_id)
@@ -237,6 +237,25 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         temp = self._callApi('POST', api_str )
         logging.debug('execute_set_mode return: {} - {}'.format(api_str, temp))
         return(temp)
+
+
+    def get_homectrl_homes(self):
+        home_list = self.get_homes_info()
+        logging.debug('get_homectrl_homes : {}'.format(home_list))
+        self.ctrl_in_homes = {}
+        for home_id, home in home_list.items():
+            found = False
+            home = home_list[home_id]
+            logging.debug('get_homectrl_homes: {}'.format(home))
+            if 'modules' in home:  
+                for module in home['modules']:
+                    logging.debug('Module : {}'.format(module))
+                    if home['modules'][module]['type'] in self._dev_list:
+                        found = True
+                if found:
+                    self.ctrl_in_homes[home_id] = home
+        logging.debug('self.ctrl_in_homes {}'.format(self.ctrl_in_homes))
+        return(self.ctrl_in_homes)
 
 
     '''

@@ -49,7 +49,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
 
         self.scopeList = [ 'read_magellan', 'write_magellan', 'read_smarther', 'write_smarther', 'read_mhs1', 'write_mhs1', 'read_thermostat', 'write_thermostat']
         
-        self._dev_list  = ['NAPlug', 'NRV', 'NATherm1']
+        self.dev_list = ['NAPlug', 'NRV', 'NATherm1']
 
         self.energy_data = {}
         self.GW_modules = ['NAPlug', 'NLG', 'NLGS', 'NLE']
@@ -63,8 +63,8 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         
 
 
-        self._dev_list  = self.power_list+self.lights_list+self.remotes_list
-        logging.debug('_dev_list: {}'.format(self._dev_list))
+        self.dev_list = self.power_list+self.lights_list+self.remotes_list
+        logging.debug('_dev_list: {}'.format(self.dev_list))
         #self.customParameters= Custom(polyglot, 'customparams')
         #self.Notices = Custom(self.poly, 'notices')
 
@@ -257,6 +257,15 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         return(homes_w_ctrl)
 
 
+
+
+    def isControlDevice(self, home, module_address):
+        if 'modules' in home:
+            for mod_idx, mod_info in enumerate(home['modules']):
+                if mod_info['id'] == module_address:
+                    return(mod_info['type'] in self.dev_list)
+        else:
+            return(False)
     '''
     
 

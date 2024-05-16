@@ -152,19 +152,22 @@ class NetatmoController(udi_interface.Node):
         #primary_gateway_list = ['NAPlug'] # controller is there for sure 
         primary_node_list = [self.id]
         for indx, home  in enumerate(self.home_list):
-            logging.debug('Adding energy rooms  {}'.format(home))
+            logging.debug('Adding rooms  {}'.format(home))
             home_name = self.poly.getValidName(home['name'])
             if 'rooms' in home:
-                for room_indx in range(0,len(home['rooms'])):
-                    room = home['rooms'][room_indx]
+                for room_indx, room in enumerate(home['rooms']):
                     # check if control valve is on room:
-                    valve_found = False
-                    for mod_id in room['module_ids']:
-                        for mod_idx in range(0,len(home['modules'])):
+                    device_found = False
+                    logging.debug('Rooms {}'.format(room))
+                    if 'module_ids' in room:
+                        for mod_id, mod_adr in room['module_ids']:
                             #logging.debug('Parsing valves {} {}'.format(mod_id,home['modules'][mod_idx] ))
-                            if home['modules'][mod_idx]['id'] == mod_id and home['modules'][mod_idx]['type'] == 'NRV':
-                                valve_found = True
-                    if valve_found:
+                            if self.myNetatmo.isControlDevice(home, mod_adr):#'modules' in home:
+                                device_found = True
+                                #for mod_idx, module in enumerate(home['modules']):                                                            
+                                #    if module['id'] == mod_id and module['type'] in self._device_list:
+                                #        device_found = True
+                    if device_found:
                         room_name = self.poly.getValidName(room['name'])
                         node_name = home_name+'-'+room_name
                         #self.room_id = room['id']

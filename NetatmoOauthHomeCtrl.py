@@ -347,7 +347,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
             found = False
             home = home_list[home_id]
             logging.debug('get_homectrl_homes: {}'.format(home))
-            if 'modules' in home:   https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/logging-format-interpolation.html
+            if 'modules' in home:  
                 for module in home['modules']:
                     logging.debug('Module : {}'.format(module))
                     if home['modules'][module]['type'] in self._dev_list:

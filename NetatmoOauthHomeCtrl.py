@@ -249,7 +249,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
             if 'modules' in home:  
                 for module in home['modules']:
                     logging.debug('Module : {}'.format(module))
-                    if module['type'] in self._dev_list:
+                    if module['type'] in self.dev_list:
                         found = True
                 if found:
                     homes_w_ctrl[home_id] = home_dict[home_id]
@@ -377,7 +377,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
             if 'modules' in home:  
                 for module in home['modules']:
                     logging.debug('Module : {}'.format(module))
-                    if home['modules'][module]['type'] in self._dev_list:
+                    if home['modules'][module]['type'] in self.dev_list:
                         found = True
                 if found:
                     self.homes_w_ctrl[home_id] = home

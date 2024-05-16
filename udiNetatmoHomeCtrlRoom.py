@@ -20,7 +20,7 @@ except ImportError:
 
 
 from udiNetatmoHomeCtrlDevices import udiNetatmoLights, udiNetatmoPower, udiNetatmoRemote
-
+from udiNetatmoEnergyDevices import udiNetatmoValve, udiNetatmoThermostat
 
 #from udi_interface import logging, Custom, Interface
 #id = 'main_netatmo'
@@ -107,15 +107,18 @@ class udiNetatmoHomeCtrlRoom(udi_interface.Node):
                 if dev_info['room_id'] == self.room_id and dev_info['type'] in self.myNetatmo.power_list:
                     logging.debug('adding  power node : {} {} {} {} {} {}'.format( self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id))
                     tmp_room = udiNetatmoPower(self.poly, self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id)
-                elif dev_info['room_id'] == self.room_id and dev_info['type'] in self.myNetatmo.litghs_list:
+                elif dev_info['room_id'] == self.room_id and dev_info['type'] in self.myNetatmo.lights_list:
                     logging.debug('adding lights  node : {} {} {} {} {} {}'.format( self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id))
                     tmp_room = udiNetatmoLights(self.poly, self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id)
                 elif dev_info['room_id'] == self.room_id and dev_info['type'] in self.myNetatmo.remote_list:
                     logging.debug('adding lights  node : {} {} {} {} {} {}'.format( self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id))
                     tmp_room = udiNetatmoRemote(self.poly, self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id)                    
-                    
+                elif dev_info['room_id'] == self.room_id and dev_info['type'] in self.myNetatmo.valve_list:
+                    logging.debug('adding lights  node : {} {} {} {} {} {}'.format( self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id))
+                    tmp_room = udiNetatmoValve(self.poly, self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id)                    
+                                        
                     while not tmp_room.node_ready:
-                        logging.debug( 'Waiting for node {}-{} to be ready'.format(valve_id, node_name))
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev_id, node_name))
                         time.sleep(4)
 
 

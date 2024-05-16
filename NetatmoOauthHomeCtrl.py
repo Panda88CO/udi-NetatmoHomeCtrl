@@ -53,10 +53,17 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
 
         self.energy_data = {}
         self.GW_modules = ['NAPlug', 'NLG', 'NLGS', 'NLE']
-        self.power =['NLP', 'NLPS']
-        self.lighhts = ['NLF']
-        self.remotes = ['NLT']
-        self.thermostat = ['NATherm1']
+
+        self.power_list =['NLP', 'NLPS']
+        self.lights_list = ['NLF']
+        self.remotes_list = ['NLT']
+
+        self.thermostat_list = ['NATherm1']
+        self.valves_list = ['NRV']
+        
+
+
+        self._dev_list  = self.power_list+self.lights_list+self.remotes_list
 
         #self.customParameters= Custom(polyglot, 'customparams')
         #self.Notices = Custom(self.poly, 'notices')
@@ -331,15 +338,15 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
             return(None)
 
 
-    def get_energy_homes(self):
-        '''    def get_energy_homes(self):'''
+    def get_homectrl_homes(self):
+        '''    def get_homectrl_homes(self):'''
         home_list = self.get_homes_info()
-        logging.debug('get_energy_homes : {}'.format(home_list))
+        logging.debug('get_homectrl_homes : {}'.format(home_list))
         self.energy_in_homes = {}
         for home_id in home_list:
             found = False
             home = home_list[home_id]
-            logging.debug('homeget_energy_homes: {}'.format(home))
+            logging.debug('get_homectrl_homes: {}'.format(home))
             if 'modules' in home:   
                 for module in home['modules']:
                     if module['type'] in self._dev_list:

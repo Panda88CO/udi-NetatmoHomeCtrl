@@ -19,7 +19,7 @@ except ImportError:
     logging.basicConfig(level=logging.DEBUG)
 
 
-from udiNetatmoHomeCtrlDevices import udiNetatmoSwitch, udiNetatmoOutlet, udiNetatmoRemote
+from udiNetatmoHomeCtrlDevices import udiNetatmoLights, udiNetatmoPower, udiNetatmoRemote
 
 
 #from udi_interface import logging, Custom, Interface
@@ -58,10 +58,7 @@ class udiNetatmoHomeCtrlRoom(udi_interface.Node):
         self.name = name
 
 
-        self.gateways = ['NLG']
-        self.outlets = ['NLPM']
-        self.remotes = ['NLT']
-        self.switches = ['']
+       
         #self.myNetatmo = NetatmoWeather
         #self.home_id = module_info['home']
         #self.main_module_id = module_info['main_module']
@@ -100,16 +97,23 @@ class udiNetatmoHomeCtrlRoom(udi_interface.Node):
 
         if 'modules' in self._home:
             for indx in range(0, len(self._home['modules'])):
-                valve_info = self._home['modules'][indx]
-                logging.debug('Valve check {} {}'.format( self.room_id, valve_info))
-                if valve_info['room_id'] == self.room_id and valve_info['type'] == 'NRV':
-                    valve_name = valve_info['name']
-                    node_name = self.poly.getValidName(valve_name)
-                    valve_id = valve_info['id']
-                    node_address = self.poly.getValidAddress(valve_id)
-                    logging.debug('adding valve node : {} {} {} {} {} {}'.format( self.primary, node_address, node_name, self.myNetatmo, self._home,  valve_id))
-
-                    tmp_room = udiNetatmoSwitch(self.poly, self.primary, node_address, node_name, self.myNetatmo, self._home,  valve_id)
+                dev_info = self._home['modules'][indx]
+                
+                logging.debug('Valve check {} {}'.format( self.room_id, dev_info))
+                dev_name = dev_info['name']
+                node_name = self.poly.getValidName(dev_name)
+                dev_id = dev_info['id']
+                node_address = self.poly.getValidAddress(dev_id)
+                if dev_info['room_id'] == self.room_id and dev_info['type'] in self.myNetatmo.power_list:
+                    logging.debug('adding  power node : {} {} {} {} {} {}'.format( self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id))
+                    tmp_room = udiNetatmoPower(self.poly, self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id)
+                elif dev_info['room_id'] == self.room_id and dev_info['type'] in self.myNetatmo.litghs_list:
+                    logging.debug('adding lights  node : {} {} {} {} {} {}'.format( self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id))
+                    tmp_room = udiNetatmoLights(self.poly, self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id)
+                elif dev_info['room_id'] == self.room_id and dev_info['type'] in self.myNetatmo.remote_list:
+                    logging.debug('adding lights  node : {} {} {} {} {} {}'.format( self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id))
+                    tmp_room = udiNetatmoRemote(self.poly, self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id)                    
+                    
                     while not tmp_room.node_ready:
                         logging.debug( 'Waiting for node {}-{} to be ready'.format(valve_id, node_name))
                         time.sleep(4)

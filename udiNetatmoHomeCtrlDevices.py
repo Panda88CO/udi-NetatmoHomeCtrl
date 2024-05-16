@@ -23,7 +23,7 @@ except ImportError:
 
 #from nodes.controller import Controller
 #from udi_interface import logging, Custom, Interface
-class udiNetatmoOutlet(udi_interface.Node):
+class udiNetatmoPower(udi_interface.Node):
     from udiNetatmoLib import bool2ISY, t_mode2ISY, update_ISY_data, node_queue, wait_for_node_done, battery2ISY, con_state2ISY
 
     def __init__(self, polyglot, primary, address, name, myNetatmo, home,  valve_id):
@@ -99,7 +99,7 @@ class udiNetatmoRemote(udi_interface.Node):
 
 
 
-class udiNetatmoSwitch(udi_interface.Node):
+class udiNetatmoLights(udi_interface.Node):
     from udiNetatmoLib import bool2ISY, t_mode2ISY, update_ISY_data, node_queue, wait_for_node_done, battery2ISY, con_state2ISY
 
     def __init__(self, polyglot, primary, address, name, myNetatmo, home,  valve_id):

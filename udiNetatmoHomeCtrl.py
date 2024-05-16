@@ -116,7 +116,7 @@ class NetatmoController(udi_interface.Node):
         time.sleep(1)
         self.poly.Notices.clear()    
 
-        self.home_ids = self.myNetatmo.get_energy_homes()
+        self.home_ids = self.myNetatmo.get_homectrl_homes()
         if self.home_ids:
             self.node.setDriver('ST', 1, True, True)
 

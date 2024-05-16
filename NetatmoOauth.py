@@ -14,6 +14,7 @@ MIT License
 import requests
 import time
 import json
+from datetime import datetime, timezone
 import urllib.parse
 #from udi_interface import LOGGER, Custom
 #from oauth import OAuth
@@ -254,7 +255,7 @@ class NetatmoCloud(OAuth):
             return(self.customParameters[key]  == value)
         else:
             return(False)
-    
+    '''
     def authendicated(self):
         try:
             logging.debug('authendicated - {}'.format(self.getOauthSettings()))
@@ -278,7 +279,7 @@ class NetatmoCloud(OAuth):
         oauthSettingsUpdate['name'] = str(name)
         self.updateOauthSettings(oauthSettingsUpdate)
     
-    '''
+    
     def _insert_refreshToken(self, refresh_token, clientId, clientSecret):
         data = {
                 'grant_type': 'refresh_token',
@@ -379,7 +380,6 @@ class NetatmoCloud(OAuth):
 
     #def set_temp_unit(self, value):
     #    self.temp_unit = value
-    
     def process_homes_data(self, net_system):
         homes_list = {}
         for home in range(0, len(net_system['homes'])):
@@ -387,7 +387,7 @@ class NetatmoCloud(OAuth):
             homes_list[tmp['id']]= tmp
         logging.debug('homes list: {}'.format(homes_list))
         return(homes_list)
-    
+
 
 
     def get_homes_info(self):
@@ -395,7 +395,7 @@ class NetatmoCloud(OAuth):
         api_str = '/homesdata'
         temp = self._callApi('GET', api_str )
         self.netatmo_systems = temp['body']
-        #logging.debug(self.netatmo_systems)
+        logging.debug(self.netatmo_systems)
         self.homes_list = self.process_homes_data(self.netatmo_systems)
         return(self.homes_list)
 
@@ -470,81 +470,6 @@ class NetatmoCloud(OAuth):
         if home_id in self.homes_list:
             return(self.homes_list[home_id]['name'])
     
-    '''
-    def process_homes_data(self, net_system):
-        homes_list = {}
-        for home in range(0, len(net_system['homes'])):
-            tmp = net_system['homes'][home]
-            homes_list[tmp['id']]= {}
-            homes_list[tmp['id']]['name']= tmp['name']
-            homes_list[tmp['id']]['modules'] = {}
-            homes_list[tmp['id']]['module_types'] = []
-            if 'modules' in tmp:
-                for mod in range(0,len(tmp['modules'])):
-                    homes_list[tmp['id']]['modules'][tmp['modules'][mod]['id']] = tmp['modules'][mod]
-                    homes_list[tmp['id']]['module_types'].append( tmp['modules'][mod]['type'] )
-        return(homes_list)
-    '''
-    def get_homes(self):
-        '''get_homes'''
-        tmp = self.get_homes_info()
-        self.weather_in_homes = {}
-        for home_id in tmp:
-            found = False
-            for mod_type in tmp[home_id]['module_types']:
-                if mod_type in  self._dev_list:
-                    found = True
-            if found:
-                self.weather_in_homes[home_id] = tmp[home_id]
-        return(self.weather_in_homes)
-
-
-    def get_home_status(self, home_id):
-        status = {}
-        logging.debug('get_home_status')
-        try:
-            if home_id:
-                home_id_str = urllib.parse.quote_plus(home_id )
-                api_str = '/homestatus?home_id='+str(home_id_str)
-
-
-            tmp = self._callApi('GET', api_str)
-            if tmp:
-                tmp = tmp['body']
-                if 'errors' not in tmp:
-                    tmp = tmp['home']
-                    status[home_id] = home_id #tmp['body']['body']['home']
-                    if 'modules' in tmp:
-                        status['modules'] = {}
-                        status['module_types'] = []
-                        for mod in range(0,len(tmp['modules'])):
-                            status['modules'][tmp['modules'][mod]['id']]= tmp['modules'][mod]
-                            status['module_types'].append(tmp['modules'][mod]['type'])
-                    logging.debug(status)
-                else:
-                    status['error'] = tmp['error']
-
-                return(status)
-        except Exception as e:
-            logging.error('Error get home status : {}'.format(e))
-            return(None)
-
-    def get_modules(self, home_id):
-        '''get_modules'''
-        logging.debug('get_modules')
-        if home_id in self.homes_list:
-            # Find relevan modules
-            return(self.homes_list[home_id]['modules'])
-        
-    def get_module_types(self, home_id):
-        '''get_module_types'''
-        if home_id in self.homes_list:
-            return(self.homes_list[home_id]['module_types'])
-
-    def get_home_name(self, home_id):
-        '''get_home_name'''
-        if home_id in self.homes_list:
-            return(self.homes_list[home_id]['name'])
 
     def get_modules_present(self, home_id):
         '''get_modules_present'''

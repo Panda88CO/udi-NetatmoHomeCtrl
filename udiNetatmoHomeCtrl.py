@@ -117,7 +117,7 @@ class NetatmoController(udi_interface.Node):
         self.poly.Notices.clear()    
 
         homes_dict = self.myNetatmo.get_homectrl_homes()
-        if self.homes_dict:
+        if homes_dict:
             self.node.setDriver('ST', 1, True, True)
         logging.debug('Home ids: {}'.format(homes_dict))
 

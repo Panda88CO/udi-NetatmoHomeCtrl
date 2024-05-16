@@ -342,8 +342,8 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         '''    def get_homectrl_homes(self):'''
         home_list = self.get_homes_info()
         logging.debug('get_homectrl_homes : {}'.format(home_list))
-        self.energy_in_homes = {}
-        for home_id in home_list:
+        self.ctrl_in_homes = {}
+        for home_id, home in home_list.items():
             found = False
             home = home_list[home_id]
             logging.debug('get_homectrl_homes: {}'.format(home))
@@ -353,9 +353,9 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
                     if home['modules'][module]['type'] in self._dev_list:
                         found = True
                 if found:
-                    self.energy_in_homes[home_id] = home
-        logging.debug('self.energy_in_homes {}'.format(self.energy_in_homes))
-        return(self.energy_in_homes)
+                    self.ctrl_in_homes[home_id] = home
+        logging.debug('self.ctrl_in_homes {}'.format(self.ctrl_in_homes))
+        return(self.ctrl_in_homes)
 
     def get_GW_modules(self, home_id):
         '''get_GW_modules '''

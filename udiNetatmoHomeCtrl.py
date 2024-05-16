@@ -119,7 +119,7 @@ class NetatmoController(udi_interface.Node):
         self.home_ids = self.myNetatmo.get_homectrl_homes()
         if self.home_ids:
             self.node.setDriver('ST', 1, True, True)
-
+        logging.debug('Home ids: {}'.format(self.home_ids))
 
         for home_id, home in self.home_ids.items():
             logging.debug('home-id {}'.format(home_id))

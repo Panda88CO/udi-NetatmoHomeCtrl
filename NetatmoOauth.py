@@ -379,6 +379,7 @@ class NetatmoCloud(OAuth):
 
     #def set_temp_unit(self, value):
     #    self.temp_unit = value
+    
     def process_homes_data(self, net_system):
         homes_list = {}
         for home in range(0, len(net_system['homes'])):
@@ -386,7 +387,7 @@ class NetatmoCloud(OAuth):
             homes_list[tmp['id']]= tmp
         logging.debug('homes list: {}'.format(homes_list))
         return(homes_list)
-
+    
 
 
     def get_homes_info(self):
@@ -394,7 +395,7 @@ class NetatmoCloud(OAuth):
         api_str = '/homesdata'
         temp = self._callApi('GET', api_str )
         self.netatmo_systems = temp['body']
-        logging.debug(self.netatmo_systems)
+        #logging.debug(self.netatmo_systems)
         self.homes_list = self.process_homes_data(self.netatmo_systems)
         return(self.homes_list)
 
@@ -469,7 +470,7 @@ class NetatmoCloud(OAuth):
         if home_id in self.homes_list:
             return(self.homes_list[home_id]['name'])
     
-
+    '''
     def process_homes_data(self, net_system):
         homes_list = {}
         for home in range(0, len(net_system['homes'])):
@@ -483,7 +484,7 @@ class NetatmoCloud(OAuth):
                     homes_list[tmp['id']]['modules'][tmp['modules'][mod]['id']] = tmp['modules'][mod]
                     homes_list[tmp['id']]['module_types'].append( tmp['modules'][mod]['type'] )
         return(homes_list)
-
+    '''
     def get_homes(self):
         '''get_homes'''
         tmp = self.get_homes_info()
@@ -496,15 +497,6 @@ class NetatmoCloud(OAuth):
             if found:
                 self.weather_in_homes[home_id] = tmp[home_id]
         return(self.weather_in_homes)
-
-    def get_homes_info(self):
-        logging.debug('get_home_info')
-        api_str = '/homesdata'
-        temp = self._callApi('GET', api_str )
-        self.netatmo_systems = temp['body']
-        logging.debug(self.netatmo_systems)
-        self.homes_list = self.process_homes_data(self.netatmo_systems)
-        return(self.homes_list)
 
 
     def get_home_status(self, home_id):

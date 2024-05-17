@@ -51,7 +51,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         
         self.dev_list = ['NAPlug', 'NRV', 'NATherm1']
 
-        self.energy_data = {}
+        self.home_data = {}
         self.GW_modules = ['NAPlug', 'NLG', 'NLGS', 'NLE']
 
         self.power_list =['NLP', 'NLPS']
@@ -265,7 +265,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
                     return(mod_info['type'] in self.dev_list)
         else:
             return(False)
-    '''
+
     
 
     def module_type (self, type):
@@ -278,92 +278,92 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
               
     def get_time_since_last_update_sec(self, home_id):
         timenow = int(time.time())
-        delay_s = int(timenow - self.energy_data[home_id]['meas_time'])
+        delay_s = int(timenow - self.home_data[home_id]['meas_time'])
         return(delay_s)
     
 
     
     def get_room_temp(self, home_id, room_id):
         logging.debug('get_room_temp')
-        if room_id in self.energy_data[home_id]['rooms']:
-            return( self.energy_data[home_id]['rooms'][room_id]['therm_measured_temperature'])
+        if room_id in self.home_data[home_id]['rooms']:
+            return( self.home_data[home_id]['rooms'][room_id]['therm_measured_temperature'])
         else:
             return(None)
         
     def get_room_setpoint_temp(self, home_id, room_id):
         logging.debug('get_room_set_point_temp')
-        if room_id in self.energy_data[home_id]['rooms']:
-            return( self.energy_data[home_id]['rooms'][room_id]['therm_setpoint_temperature'])
+        if room_id in self.home_data[home_id]['rooms']:
+            return( self.home_data[home_id]['rooms'][room_id]['therm_setpoint_temperature'])
         else:
             return(None)
 
 
     def get_room_setpoint_mode(self, home_id, room_id):
         logging.debug('get_room_set_point_mode')
-        if room_id in self.energy_data[home_id]['rooms']:
-            return( self.energy_data[home_id]['rooms'][room_id]['therm_setpoint_mode'])
+        if room_id in self.home_data[home_id]['rooms']:
+            return( self.home_data[home_id]['rooms'][room_id]['therm_setpoint_mode'])
         else:
             return(None)
         
     def get_room_online(self, home_id, room_id):
-        logging.debug('get_room_online - {} {} {}'.format(home_id, room_id, self.energy_data))
-        if room_id in self.energy_data[home_id]['rooms']:
-            return( self.energy_data[home_id]['rooms'][room_id]['reachable'])
+        logging.debug('get_room_online - {} {} {}'.format(home_id, room_id, self.home_data))
+        if room_id in self.home_data[home_id]['rooms']:
+            return( self.home_data[home_id]['rooms'][room_id]['reachable'])
         else:
             return(None)
     
     def get_room_anticipating(self, home_id, room_id):
         logging.debug('get_room_anticipating')
-        if room_id in self.energy_data[home_id]['rooms']:
-            return( self.energy_data[home_id]['rooms'][room_id]['anticipating'])
+        if room_id in self.home_data[home_id]['rooms']:
+            return( self.home_data[home_id]['rooms'][room_id]['anticipating'])
         else:
             return(None)
         
     def get_room_heat_power_request(self, home_id, room_id):
         logging.debug('get_room_heat_power_request')
-        if room_id in self.energy_data[home_id]['rooms']:
-            return( self.energy_data[home_id]['rooms'][room_id]['heating_power_request'])
+        if room_id in self.home_data[home_id]['rooms']:
+            return( self.home_data[home_id]['rooms'][room_id]['heating_power_request'])
         else:
             return(None)
 
 
     def get_room_open_window(self, home_id, room_id):
         logging.debug('get_room_open_window')
-        if room_id in self.energy_data[home_id]['rooms']:
-            return( self.energy_data[home_id]['rooms'][room_id]['open_window'])
+        if room_id in self.home_data[home_id]['rooms']:
+            return( self.home_data[home_id]['rooms'][room_id]['open_window'])
         else:
             return(None)
 
 
     def get_valve_online(self, home_id, valve_id):
-        logging.debug('get_valve_online - data{} {} {}'.format(home_id, valve_id, self.energy_data) )
-        if valve_id in self.energy_data[home_id]['modules']:
-                return( self.energy_data[home_id]['modules'][valve_id]['reachable'])
+        logging.debug('get_valve_online - data{} {} {}'.format(home_id, valve_id, self.home_data) )
+        if valve_id in self.home_data[home_id]['modules']:
+                return( self.home_data[home_id]['modules'][valve_id]['reachable'])
         else:
             return(None)
 
     def get_valve_bat_state(self, home_id, valve_id):
         logging.debug('get_valve_bat_state')
-        if valve_id in self.energy_data[home_id]['modules']:
-            return( self.energy_data[home_id]['modules'][valve_id]['battery_state'])
+        if valve_id in self.home_data[home_id]['modules']:
+            return( self.home_data[home_id]['modules'][valve_id]['battery_state'])
         else:
             return(None)
 
     def get_valve_bat_level(self, home_id, valve_id):
         logging.debug('get_valve_bat_level')
-        if valve_id in self.energy_data[home_id]['modules']:
-            return( self.energy_data[home_id]['modules'][valve_id]['battery_level'])
+        if valve_id in self.home_data[home_id]['modules']:
+            return( self.home_data[home_id]['modules'][valve_id]['battery_level'])
         else:
             return(None)
 
     def get_valve_rf_strength(self, home_id, valve_id):
         logging.debug('get_valve_rf_strength')
-        if valve_id in self.energy_data[home_id]['modules']:
-            return( self.energy_data[home_id]['modules'][valve_id]['rf_strength'])
+        if valve_id in self.home_data[home_id]['modules']:
+            return( self.home_data[home_id]['modules'][valve_id]['rf_strength'])
         else:
             return(None)
 
-
+    '''
     def get_homectrl_homes(self):
 
         home_list = self.get_homes_info()
@@ -382,7 +382,8 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
                     self.homes_w_ctrl[home_id] = home
         logging.debug('self.homes_w_ctrl {}'.format(self.homes_w_ctrl))
         return(self.homes_w_ctrl)
-
+    '''
+    
     def get_GW_modules(self, home_id):
         
         tmp = self._get_modules(home_id, self.GW_modules)
@@ -392,111 +393,111 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
 
 
 
-    def _get_energy_data(self, home_id, dev_id, mod_type):
+    def _get_home_data(self, home_id, dev_id, mod_type):
  
-        if home_id in self.energy_data:
-            if mod_type in self.energy_data[home_id]:
-                if dev_id in self.energy_data[home_id][mod_type]:
-                    return(self.energy_data[home_id][mod_type][dev_id])
+        if home_id in self.home_data:
+            if mod_type in self.home_data[home_id]:
+                if dev_id in self.home_data[home_id][mod_type]:
+                    return(self.home_data[home_id][mod_type][dev_id])
         else:
             logging.warning('No data fouond for {0} {1}'.format(home_id, dev_id))
-    '''
+
     def get_main_module_data(self, home_id, dev_id):
         #Get data from main module
         logging.debug('get_main_module_data')
         #data_list = ['Temperature', 'CO2', 'Humidity', 'Noise', 'Pressure', 'AbsolutePressure', 'min_temp', 'max_temp', 'date_max_temp', 'date_min_temp', 'temp_trend', 'reachable']
-        return(self._get_energy_data(home_id, dev_id, 'GW'))
+        return(self._get_home_data(home_id, dev_id, 'GW'))
     '''    
 
     def get_module_data(self, module):
         logging.debug('get_indoor_module_data')
         #data_list = ['temperature', 'co2', 'humidity', 'last_seen', 'battery_state', 'ts']
-        return(self._get_energy_data(module['home_id'], module['module_id'], module['type']))
+        return(self._get_home_data(module['home_id'], module['module_id'], module['type']))
                
     '''
     def get_outdoor_module_data(self, home_id, dev_id=None):
         logging.debug('get_outdoor_module_data')
         #data_list = ['temperature', 'co2', 'humidity', 'last_seen', 'battery_state', 'ts']
-        return(self._get_energy_data(home_id, dev_id, 'OUTDOOR'))
+        return(self._get_home_data(home_id, dev_id, 'OUTDOOR'))
 
     def get_rain_module_data(self, home_id, dev_id=None):
         logging.debug('get_rain_module_data')
         #data_list = ['rain', 'sum_rain_1', 'sum_rail_24', 'last_seen', 'battery_state', 'ts']
-        return(self._get_energy_data(home_id, dev_id, 'RAIN'))
+        return(self._get_home_data(home_id, dev_id, 'RAIN'))
 
     def get_wind_module_data(self, home_id, dev_id=None):
         logging.debug('get_wind_module_data')
         #data_list = ['wind_strength', 'wind_angle', 'wind+gust', 'wind_gust_angle', 'last_seen', 'battery_state', 'ts']
-        return(self._get_energy_data(home_id, dev_id, 'WIND'))
+        return(self._get_home_data(home_id, dev_id, 'WIND'))
     '''
 
     def get_temperature_C(self, module):
         try:
-            logging.debug('get_temperature_C {} {} {} {}'.format(self.energy_data[module['home_id']][module['type']][module['module_id']]['temperature'],module['home_id'], module['type'], module['module_id'] ))
-            return(self.energy_data[module['home_id']][module['type']][module['module_id']]['temperature'])       
+            logging.debug('get_temperature_C {} {} {} {}'.format(self.home_data[module['home_id']][module['type']][module['module_id']]['temperature'],module['home_id'], module['type'], module['module_id'] ))
+            return(self.home_data[module['home_id']][module['type']][module['module_id']]['temperature'])       
         except Exception as e:
             logging.error('get_temperature_C exception; {}'.format(e))
             return(None)
     def get_max_temperature_C (self, module):
         try:
-            logging.debug('get_max_temperature_C {} {} {} {}'.format(self.energy_data[module['home_id']][module['type']][module['module_id']]['max_temp'],module['home_id'], module['type'], module['module_id'] ))
-            return(self.energy_data[module['home_id']][module['type']][module['module_id']]['max_temp'])       
+            logging.debug('get_max_temperature_C {} {} {} {}'.format(self.home_data[module['home_id']][module['type']][module['module_id']]['max_temp'],module['home_id'], module['type'], module['module_id'] ))
+            return(self.home_data[module['home_id']][module['type']][module['module_id']]['max_temp'])       
         except Exception as e:
             logging.error('get_max_temperature_C exception; {}'.format(e))
             return(None)
 
     def get_min_temperature_C(self, module):
         try:
-            logging.debug('get_min_temperature_C {} {} {} {}'.format(self.energy_data[module['home_id']][module['type']][module['module_id']]['min_temp'],module['home_id'], module['type'], module['module_id'] ))
-            return(self.energy_data[module['home_id']][module['type']][module['module_id']]['min_temp'])       
+            logging.debug('get_min_temperature_C {} {} {} {}'.format(self.home_data[module['home_id']][module['type']][module['module_id']]['min_temp'],module['home_id'], module['type'], module['module_id'] ))
+            return(self.home_data[module['home_id']][module['type']][module['module_id']]['min_temp'])       
         except Exception as e:
             logging.error('get_min_temperature_C exception; {}'.format(e))
             return(None)
 
     def get_co2(self, module):
         try:
-            logging.debug('get_co2 {} {} {} {}'.format(self.energy_data[module['home_id']][module['type']][module['module_id']]['co2'],module['home_id'], module['type'], module['module_id'] ))
-            return(self.energy_data[module['home_id']][module['type']][module['module_id']]['co2'])       
+            logging.debug('get_co2 {} {} {} {}'.format(self.home_data[module['home_id']][module['type']][module['module_id']]['co2'],module['home_id'], module['type'], module['module_id'] ))
+            return(self.home_data[module['home_id']][module['type']][module['module_id']]['co2'])       
         except Exception as e:
             logging.error('get_co2 exception; {}'.format(e))
             return(None)
 
     def get_noise(self, module):
         try:
-            logging.debug('get_noise {} {} {} {}'.format(self.energy_data[module['home_id']][module['type']][module['module_id']]['noise'],module['home_id'], module['type'], module['module_id'] ))
-            return(self.energy_data[module['home_id']][module['type']][module['module_id']]['noise'])       
+            logging.debug('get_noise {} {} {} {}'.format(self.home_data[module['home_id']][module['type']][module['module_id']]['noise'],module['home_id'], module['type'], module['module_id'] ))
+            return(self.home_data[module['home_id']][module['type']][module['module_id']]['noise'])       
         except Exception as e:
             logging.error('get_co2 exception; {}'.format(e))
             return(None)
         
     def get_humidity(self, module):
         try:
-            logging.debug('get_humidity {} {} {} {}'.format(self.energy_data[module['home_id']][module['type']][module['module_id']]['humidity'],module['home_id'], module['type'], module['module_id'] ))
-            return(self.energy_data[module['home_id']][module['type']][module['module_id']]['humidity'])       
+            logging.debug('get_humidity {} {} {} {}'.format(self.home_data[module['home_id']][module['type']][module['module_id']]['humidity'],module['home_id'], module['type'], module['module_id'] ))
+            return(self.home_data[module['home_id']][module['type']][module['module_id']]['humidity'])       
         except Exception as e:
             logging.error('get_humidity exception; {}'.format(e))
             return(None)
 
     def get_pressure(self, module):
         try:
-            logging.debug('get_pressure {} {} {} {}'.format(self.energy_data[module['home_id']][module['type']][module['module_id']]['pressure'],module['home_id'], module['type'], module['module_id'] ))
-            return(self.energy_data[module['home_id']][module['type']][module['module_id']]['pressure'])       
+            logging.debug('get_pressure {} {} {} {}'.format(self.home_data[module['home_id']][module['type']][module['module_id']]['pressure'],module['home_id'], module['type'], module['module_id'] ))
+            return(self.home_data[module['home_id']][module['type']][module['module_id']]['pressure'])       
         except Exception as e:
             logging.error('get_pressure exception; {}'.format(e))
             return(None)
 
     def get_abs_pressure(self, module):
         try:
-            logging.debug('get_abs_pressure {} {} {} {}'.format(self.energy_data[module['home_id']][module['type']][module['module_id']]['absolute_pressure'],module['home_id'], module['type'], module['module_id'] ))
-            return(self.energy_data[module['home_id']][module['type']][module['module_id']]['absolute_pressure'])       
+            logging.debug('get_abs_pressure {} {} {} {}'.format(self.home_data[module['home_id']][module['type']][module['module_id']]['absolute_pressure'],module['home_id'], module['type'], module['module_id'] ))
+            return(self.home_data[module['home_id']][module['type']][module['module_id']]['absolute_pressure'])       
         except Exception as e:
             logging.error('absolute_pressure exception; {}'.format(e))
             return(None)        
 
     def get_time_stamp(self, module):
         try:
-            logging.debug('get_time_stamp {} {} {} {}'.format(self.energy_data[module['home_id']][module['type']][module['module_id']]['time_stamp'],module['home_id'], module['type'], module['module_id'] ))
-            return(self.energy_data[module['home_id']][module['type']][module['module_id']]['time_stamp'])       
+            logging.debug('get_time_stamp {} {} {} {}'.format(self.home_data[module['home_id']][module['type']][module['module_id']]['time_stamp'],module['home_id'], module['type'], module['module_id'] ))
+            return(self.home_data[module['home_id']][module['type']][module['module_id']]['time_stamp'])       
         except Exception as e:
             logging.error('get_time_stamp exception: {}'.format(e))
             return(None)        
@@ -509,7 +510,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
 
     def get_temp_trend(self, module):
         try:
-            trend = self.energy_data[module['home_id']][module['type']][module['module_id']]['temp_trend']
+            trend = self.home_data[module['home_id']][module['type']][module['module_id']]['temp_trend']
             return(trend)       
         except Exception as e:
             logging.error('get_temp_trend exception; {}'.format(e))
@@ -517,7 +518,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
     
     def get_hum_trend(self, module):
         try:
-            trend = self.energy_data[module['home_id']][module['type']][module['module_id']]['pressure_trend']
+            trend = self.home_data[module['home_id']][module['type']][module['module_id']]['pressure_trend']
    
         except Exception as e:
             logging.error('get_hum_trend exception; {}'.format(e))
@@ -526,80 +527,80 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
 
     def get_rain(self, module):
         try:
-            logging.debug('get_rain {} {} {} {}'.format(self.energy_data[module['home_id']][module['type']][module['module_id']]['rain'],module['home_id'], module['type'], module['module_id'] ))
-            return(self.energy_data[module['home_id']][module['type']][module['module_id']]['rain'])       
+            logging.debug('get_rain {} {} {} {}'.format(self.home_data[module['home_id']][module['type']][module['module_id']]['rain'],module['home_id'], module['type'], module['module_id'] ))
+            return(self.home_data[module['home_id']][module['type']][module['module_id']]['rain'])       
         except Exception as e:
             logging.error('get_rain exception; {}'.format(e))
             return(None)      
 
     def get_rain_1hour(self, module):
         try:
-            logging.debug('get_rain_1hour {} {} {} {}'.format(self.energy_data[module['home_id']][module['type']][module['module_id']]['sum_rain_1'],module['home_id'], module['type'], module['module_id'] ))
-            return(self.energy_data[module['home_id']][module['type']][module['module_id']]['sum_rain_1'])       
+            logging.debug('get_rain_1hour {} {} {} {}'.format(self.home_data[module['home_id']][module['type']][module['module_id']]['sum_rain_1'],module['home_id'], module['type'], module['module_id'] ))
+            return(self.home_data[module['home_id']][module['type']][module['module_id']]['sum_rain_1'])       
         except Exception as e:
             logging.error('get_rain_1hour {}'.format(e))
             return(None)  
     
     def get_rain_24hours(self, module):
         try:
-            logging.debug('get_rain_24hours {} {} {} {}'.format(self.energy_data[module['home_id']][module['type']][module['module_id']]['sum_rain_24'],module['home_id'], module['type'], module['module_id'] ))
-            return(self.energy_data[module['home_id']][module['type']][module['module_id']]['sum_rain_24'])       
+            logging.debug('get_rain_24hours {} {} {} {}'.format(self.home_data[module['home_id']][module['type']][module['module_id']]['sum_rain_24'],module['home_id'], module['type'], module['module_id'] ))
+            return(self.home_data[module['home_id']][module['type']][module['module_id']]['sum_rain_24'])       
         except Exception as e:
             logging.error('get_rain_24hours exception; {}'.format(e))
             return(None)  
 
     def get_wind_angle(self, module):
         try:
-            logging.debug('get_wind_angle {} {} {} {}'.format(self.energy_data[module['home_id']][module['type']][module['module_id']]['windangle'],module['home_id'], module['type'], module['module_id'] ))
-            return(self.energy_data[module['home_id']][module['type']][module['module_id']]['windangle'])       
+            logging.debug('get_wind_angle {} {} {} {}'.format(self.home_data[module['home_id']][module['type']][module['module_id']]['windangle'],module['home_id'], module['type'], module['module_id'] ))
+            return(self.home_data[module['home_id']][module['type']][module['module_id']]['windangle'])       
         except Exception as e:
             logging.error('get_wind_angle exception; {}'.format(e))
             return(None)  
 
     def get_wind_strength(self, module):
         try:
-            logging.debug('get_wind_strength {} {} {} {}'.format(self.energy_data[module['home_id']][module['type']][module['module_id']]['windstrength'],module['home_id'], module['type'], module['module_id'] ))
-            return(self.energy_data[module['home_id']][module['type']][module['module_id']]['windstrength'])       
+            logging.debug('get_wind_strength {} {} {} {}'.format(self.home_data[module['home_id']][module['type']][module['module_id']]['windstrength'],module['home_id'], module['type'], module['module_id'] ))
+            return(self.home_data[module['home_id']][module['type']][module['module_id']]['windstrength'])       
         except Exception as e:
             logging.error('get_wind_strength exception; {}'.format(e))
             return(None)  
 
     def get_gust_angle(self, module):
         try:
-            logging.debug('get_wind_angle {} {} {} {}'.format(self.energy_data[module['home_id']][module['type']][module['module_id']]['gustangle'],module['home_id'], module['type'], module['module_id'] ))
-            return(self.energy_data[module['home_id']][module['type']][module['module_id']]['gustangle'])       
+            logging.debug('get_wind_angle {} {} {} {}'.format(self.home_data[module['home_id']][module['type']][module['module_id']]['gustangle'],module['home_id'], module['type'], module['module_id'] ))
+            return(self.home_data[module['home_id']][module['type']][module['module_id']]['gustangle'])       
         except Exception as e:
             logging.error('get_wind_angle exception; {}'.format(e))
             return(None)  
 
     def get_gust_strength(self, module):
         try:
-            logging.debug('get_wind_strength {} {} {} {}'.format(self.energy_data[module['home_id']][module['type']][module['module_id']]['guststrength'],module['home_id'], module['type'], module['module_id'] ))
-            return(self.energy_data[module['home_id']][module['type']][module['module_id']]['guststrength'])       
+            logging.debug('get_wind_strength {} {} {} {}'.format(self.home_data[module['home_id']][module['type']][module['module_id']]['guststrength'],module['home_id'], module['type'], module['module_id'] ))
+            return(self.home_data[module['home_id']][module['type']][module['module_id']]['guststrength'])       
         except Exception as e:
             logging.error('get_wind_strength exception; {}'.format(e))
             return(None)  
         
     def get_max_wind_angle(self, module):
         try:
-            logging.debug('get_wind_angle {} {} {} {}'.format(self.energy_data[module['home_id']][module['type']][module['module_id']]['max_wind_angle'],module['home_id'], module['type'], module['module_id'] ))
-            return(self.energy_data[module['home_id']][module['type']][module['module_id']]['max_wind_angle'])       
+            logging.debug('get_wind_angle {} {} {} {}'.format(self.home_data[module['home_id']][module['type']][module['module_id']]['max_wind_angle'],module['home_id'], module['type'], module['module_id'] ))
+            return(self.home_data[module['home_id']][module['type']][module['module_id']]['max_wind_angle'])       
         except Exception as e:
             logging.error('get_wind_angle exception; {}'.format(e))
             return(None)  
 
     def get_max_wind_strength(self, module):
         try:
-            logging.debug('get_wind_strength {} {} {} {}'.format(self.energy_data[module['home_id']][module['type']][module['module_id']]['max_wind_str'],module['home_id'], module['type'], module['module_id'] ))
-            return(self.energy_data[module['home_id']][module['type']][module['module_id']]['max_wind_str'])       
+            logging.debug('get_wind_strength {} {} {} {}'.format(self.home_data[module['home_id']][module['type']][module['module_id']]['max_wind_str'],module['home_id'], module['type'], module['module_id'] ))
+            return(self.home_data[module['home_id']][module['type']][module['module_id']]['max_wind_str'])       
         except Exception as e:
             logging.error('get_wind_strength exception; {}'.format(e))
             return(None)          
 
     def get_battery_info(self, module):
         try:
-            bat1 = self.energy_data[module['home_id']][module['type']][module['module_id']]['battery_state']
-            bat2 = self.energy_data[module['home_id']][module['type']][module['module_id']]['battery_level']
+            bat1 = self.home_data[module['home_id']][module['type']][module['module_id']]['battery_state']
+            bat2 = self.home_data[module['home_id']][module['type']][module['module_id']]['battery_level']
             return (bat1, bat2)
         except Exception as e:
             logging.error('get_battery_info exception: {}'.format(e))
@@ -609,14 +610,14 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         try:
             rf1 = None
             rf2 = None
-            if 'rf_state' in self.energy_data[module['home_id']][module['type']][module['module_id']]:
-                rf1 = self.energy_data[module['home_id']][module['type']][module['module_id']]['rf_state']               
-            if 'wifi_state' in self.energy_data[module['home_id']][module['type']][module['module_id']]:
-                rf1 = self.energy_data[module['home_id']][module['type']][module['module_id']]['wifi_state']
-            if 'rf_strength' in self.energy_data[module['home_id']][module['type']][module['module_id']]:
-                rf2 = -self.energy_data[module['home_id']][module['type']][module['module_id']]['rf_strength']
-            if 'wifi_strength' in self.energy_data[module['home_id']][module['type']][module['module_id']]:
-                rf2 = -self.energy_data[module['home_id']][module['type']][module['module_id']]['wifi_strength']           
+            if 'rf_state' in self.home_data[module['home_id']][module['type']][module['module_id']]:
+                rf1 = self.home_data[module['home_id']][module['type']][module['module_id']]['rf_state']               
+            if 'wifi_state' in self.home_data[module['home_id']][module['type']][module['module_id']]:
+                rf1 = self.home_data[module['home_id']][module['type']][module['module_id']]['wifi_state']
+            if 'rf_strength' in self.home_data[module['home_id']][module['type']][module['module_id']]:
+                rf2 = -self.home_data[module['home_id']][module['type']][module['module_id']]['rf_strength']
+            if 'wifi_strength' in self.home_data[module['home_id']][module['type']][module['module_id']]:
+                rf2 = -self.home_data[module['home_id']][module['type']][module['module_id']]['wifi_strength']           
             return(rf1, rf2)
         except Exception as e:
             logging.error('get_rf_info exception; {}'.format(e))
@@ -625,13 +626,13 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
     def get_online(self, module):
         try:
             #logging.debug('module {} '.format(module) )
-            #logging.debug('module data1: {}'.format(self.energy_data))
+            #logging.debug('module data1: {}'.format(self.home_data))
             #logging.debug('module data2: {} - {} - {}'.format(module['home_id'], module['type'],module['module_id']))
-            #logging.debug('module data3: {}'.format(self.energy_data[module['home_id']]))
-            #logging.debug('module data4: {}'.format(self.energy_data[module['home_id']][module['type']][module['module_id']]))
-            #logging.debug('get_online {} {} {} {}'.format(self.energy_data[module['home_id']][module['type']][module['module_id']]['online'],module['home_id'], module['type'], module['module_id'] ))
-            if 'online' in self.energy_data[module['home_id']][module['type']][module['module_id']]:    
-                return(self.energy_data[module['home_id']][module['type']][module['module_id']]['online'])
+            #logging.debug('module data3: {}'.format(self.home_data[module['home_id']]))
+            #logging.debug('module data4: {}'.format(self.home_data[module['home_id']][module['type']][module['module_id']]))
+            #logging.debug('get_online {} {} {} {}'.format(self.home_data[module['home_id']][module['type']][module['module_id']]['online'],module['home_id'], module['type'], module['module_id'] ))
+            if 'online' in self.home_data[module['home_id']][module['type']][module['module_id']]:    
+                return(self.home_data[module['home_id']][module['type']][module['module_id']]['online'])
             else:
                 return(False)      
         except Exception as e:

@@ -110,7 +110,7 @@ class udiNetatmoHomeCtrlRoom(udi_interface.Node):
                 elif dev_info['room_id'] == self.room_id and dev_info['type'] in self.myNetatmo.lights_list:
                     logging.debug('adding lights  node : {} {} {} {} {} {}'.format( self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id))
                     tmp_room = udiNetatmoLights(self.poly, self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id)
-                elif dev_info['room_id'] == self.room_id and dev_info['type'] in self.myNetatmo.remote_list:
+                elif dev_info['room_id'] == self.room_id and dev_info['type'] in self.myNetatmo.remotes_list:
                     logging.debug('adding lights  node : {} {} {} {} {} {}'.format( self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id))
                     tmp_room = udiNetatmoRemote(self.poly, self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id)                    
                 elif dev_info['room_id'] == self.room_id and dev_info['type'] in self.myNetatmo.valve_list:

@@ -160,7 +160,7 @@ class NetatmoController(udi_interface.Node):
                     device_found = False
                     logging.debug('Rooms {}'.format(room))
                     if 'module_ids' in room:
-                        for mod_id, mod_adr in room['module_ids']:
+                        for mod_id, mod_adr in enumerate(room['module_ids']):
                             #logging.debug('Parsing valves {} {}'.format(mod_id,home['modules'][mod_idx] ))
                             if self.myNetatmo.isControlDevice(home, mod_adr):#'modules' in home:
                                 device_found = True

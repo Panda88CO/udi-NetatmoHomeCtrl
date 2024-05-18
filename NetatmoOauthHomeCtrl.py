@@ -256,8 +256,10 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
 
 
     def isControlDevice(self, home, module_address):
+        logging.debug('isControlDevice {} - {}'.format(module_address, home ))
         if 'modules' in home:
             for mod_idx, mod_info in enumerate(home['modules']):
+                logging.debug('isControlDevice loop {}'.format(mod_info))
                 if mod_info['id'] == module_address:
                     return(mod_info['type'] in self.dev_list)
         else:

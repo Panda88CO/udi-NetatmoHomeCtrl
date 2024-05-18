@@ -93,13 +93,13 @@ class udiNetatmoHomeCtrlRoom(udi_interface.Node):
     def addNodes(self):
         '''addNodes'''
 
-        logging.debug('Adding valves to {} {}'.format(self.name, self._home))
+        logging.debug('Adding devices to {} {}'.format(self.name, self._home))
 
         if 'modules' in self._home:
             for indx in range(0, len(self._home['modules'])):
                 dev_info = self._home['modules'][indx]
                 
-                logging.debug('Valve check {} {}'.format( self.room_id, dev_info))
+                logging.debug('Device check {} {}'.format( self.room_id, dev_info))
                 dev_name = dev_info['name']
                 node_name = self.poly.getValidName(dev_name)
                 dev_id = dev_info['id']

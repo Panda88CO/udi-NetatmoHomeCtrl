@@ -261,7 +261,9 @@ class NetatmoController(udi_interface.Node):
                 if 'shortPoll' in polltype:
                     self.heartbeat()
                     #self.myNetatmo.refresh_token()
+                    logging.debug('shortpoll  {}'.format(self.myNetatmo.homes_list))
                     for home_id in self.myNetatmo.homes_list:
+                        logging.debug('shortpoll loop {}'.format(home_id))
                         self.myNetatmo.get_home_status(home_id)
                     for nde in nodes:
                         if nde.address != 'controller':   # but not the setup node

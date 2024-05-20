@@ -51,7 +51,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         
 
         self.GW_modules = ['NAPlug', 'NLG', 'NLGS', 'NLE']
-        self.power_list =['NLP', 'NLPS']
+        self.power_list =['NLP', 'NLPS', 'NLPM']
         self.lights_list = ['NLF']
         self.remotes_list = ['NLT']
 

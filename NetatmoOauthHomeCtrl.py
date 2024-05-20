@@ -250,6 +250,8 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
                         found = True
                 if found:
                     homes_w_ctrl[home_id] = home_dict[home_id]
+                    self.update_home_data(home_id, home_dict[home_id])
+
         logging.debug('homes_w_ctrl {}'.format(homes_w_ctrl))
         return(homes_w_ctrl)
 
@@ -345,8 +347,8 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
             return(None)
 
 
-    def get_valve_online(self, home_id, valve_id):
-        logging.debug('get_valve_online - data{} {} {}'.format(home_id, valve_id, self.home_data) )
+    def get_module_online(self, home_id, valve_id):
+        logging.debug('get_module_online - data{} {} {}'.format(home_id, valve_id, self.home_data) )
         if valve_id in self.home_data[home_id]['modules']:
                 return( self.home_data[home_id]['modules'][valve_id]['reachable'])
         else:
@@ -389,12 +391,15 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
                 tmp = self._callApi('GET', api_str)
                 logging.debug('get_home_status - tmp: {}'.format(tmp))
                 if tmp:
-                    meas_time = tmp['time_server']                
+                    meas_time = tmp['time_server']         
                     if 'errors' in tmp:
                         status['error'] = tmp['error']
 
                     if 'body' in tmp:
                         tmp = tmp['body']['home']
+                        self.update_home_data(home_id, tmp)
+                        self.home_data[home_id]['meas_time'] = meas_time
+                        '''
                         status[home_id] = home_id #tmp['body']['body']['home']
                         logging.debug('get_home_status - tmp2: {}'.format(tmp))
                         if 'modules' in tmp:
@@ -411,15 +416,25 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
                                 status['rooms'][room['id']] = room
                         status['meas_time'] = meas_time
                         self.home_data[home_id] = status
-                        logging.debug('status2: {}'.format(status))                
+                        logging.debug('status2: {}'.format(status))
+                        '''                
                     logging.debug('home_data : {} {}'.format(home_id, self.home_data ))
-                    return(status)
+                    return(self.home_data[home_id])
                 else:
                     return(None)
         except Exception as e:
-            logging.error('Error get home status : {}'.format(e))
+            logging.error('Error get home status : {}'.format(e))  
             return(None)
     
+
+    def update_home_data(self, home_id, h_data):
+        logging.debug('update_home_data : {}'.format(h_data))
+        if [home_id] not in self.home_data:
+            self.home_data[home_id] = {}
+        for item in h_data:
+            self.home_data[home_id][item] = h_data[item]
+
+
     '''
     
     def get_homectrl_homes(self):

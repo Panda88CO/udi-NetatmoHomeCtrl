@@ -67,7 +67,7 @@ class udiNetatmoPower(udi_interface.Node):
         #data = self.myNetatmo.get_module_data(self.module)
         logging.debug('Valve module data:')
         if self.node is not None:
-            if self.myNetatmo.get_valve_online(self.home_id, self.valve_id):
+            if self.myNetatmo.get_module_online(self.home_id, self.valve_id):
                 self.node.setDriver('ST',1)
                 self.node.setDriver('GV2', round(self.myNetatmo.get_valve_bat_level(self.home_id, self.valve_id)/1000, 2), True, True, 72)
                 self.node.setDriver('GV0', self.battery2ISY(self.myNetatmo.get_valve_bat_state(self.home_id, self.valve_id)))
@@ -114,7 +114,7 @@ class udiNetatmoRemote(udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
-        logging.info('Start {} valve Node'.format(self.name))  
+        logging.info('Start {} Remote Node'.format(self.name))  
         time.sleep(1)
         self.n_queue = []  
         self.nodeDefineDone = True
@@ -126,7 +126,7 @@ class udiNetatmoRemote(udi_interface.Node):
         #data = self.myNetatmo.get_module_data(self.module)
         logging.debug('Valve module data:')
         if self.node is not None:
-            if self.myNetatmo.get_valve_online(self.home_id, self.valve_id):
+            if self.myNetatmo.get_module_online(self.home_id, self.valve_id):
                 self.node.setDriver('ST',1)
                 self.node.setDriver('GV2', round(self.myNetatmo.get_valve_bat_level(self.home_id, self.valve_id)/1000, 2), True, True, 72)
                 self.node.setDriver('GV0', self.battery2ISY(self.myNetatmo.get_valve_bat_state(self.home_id, self.valve_id)))
@@ -175,7 +175,7 @@ class udiNetatmoLights(udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
-        logging.info('Start {} valve Node'.format(self.name))  
+        logging.info('Start {} Lights Node'.format(self.name))  
         time.sleep(1)
         self.n_queue = []  
         self.nodeDefineDone = True
@@ -198,7 +198,7 @@ class udiNetatmoLights(udi_interface.Node):
         #data = self.myNetatmo.get_module_data(self.module)
         logging.debug('Valve module data:')
         if self.node is not None:
-            if self.myNetatmo.get_valve_online(self.home_id, self.valve_id):
+            if self.myNetatmo.get_module_online(self.home_id, self.valve_id):
                 self.node.setDriver('ST',1)
                 self.node.setDriver('GV2', round(self.myNetatmo.get_valve_bat_level(self.home_id, self.valve_id)/1000, 2), True, True, 72)
                 self.node.setDriver('GV0', self.battery2ISY(self.myNetatmo.get_valve_bat_state(self.home_id, self.valve_id)))

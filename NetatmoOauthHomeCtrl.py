@@ -261,6 +261,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
             for mod_idx, mod_info in enumerate(home['modules']):
                 logging.debug('isControlDevice loop {}'.format(mod_info))
                 if mod_info['id'] == module_address:
+                    logging.debug('Device address found : {} {} {}'.format(mod_info['id'],mod_info['type'], self.dev_list))
                     return(mod_info['type'] in self.dev_list)
         else:
             return(False)
@@ -270,11 +271,20 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
     def module_type (self, type):
         if type in self.GW_modules:
             return('GATEWAY')
-        if type in self.valves:
+        elif type in self.valves:
             return('VALVE')
-        if type in self.thermostat:
+        elif type in self.thermostat:
             return('THERMOSTAT')
-              
+        elif type in self.thermostat:
+            return('POWER')
+        elif type in self.thermostat:
+            return('LIGHTS')
+        elif type in self.thermostat:
+            return('REMOTES')
+        else:
+            return('UNKNOWN')
+
+
     def get_time_since_last_update_sec(self, home_id):
         timenow = int(time.time())
         delay_s = int(timenow - self.home_data[home_id]['meas_time'])

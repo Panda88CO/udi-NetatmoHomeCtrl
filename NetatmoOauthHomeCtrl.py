@@ -442,7 +442,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
                         if type(list_item) is dict:
                             if item not in self.home_data[home_id]:
                                 self.home_data[home_id][item] = {}
-                            self.home_data[home_id][item][list_item['id']] = h_data[item][list_item]
+                            self.home_data[home_id][item][list_item['id']] = list_item
                 elif type(h_data[item]) is dict:
                     logging.debug('adding dict {}'.format(h_data[item]))
                     for key in h_data[item]:

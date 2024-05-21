@@ -178,7 +178,7 @@ class NetatmoController(udi_interface.Node):
                         primary_node_list.append(node_address)
                         while not temp.node_ready:
                             logging.debug( 'Waiting for node {}-{} to be ready'.format(self.home_id, node_name))
-                            time.sleep(2)
+                            time.sleep(1)
             
         #removing unused nodes
         while not self.configDone:

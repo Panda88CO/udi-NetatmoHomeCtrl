@@ -90,6 +90,7 @@ class udiNetatmoRemote(udi_interface.Node):
 
     def __init__(self, polyglot, primary, address, name, myNetatmo, home,  module_id):
         super().__init__(polyglot, primary, address, name)
+        logging.debug('__init__ udiNetatmoRemote {} {} {} {}'.format(primary, address,name, home ))
         self.poly = polyglot
         self.myNetatmo= myNetatmo
         self.module_id = module_id
@@ -230,11 +231,11 @@ class udiNetatmoLights(udi_interface.Node):
 class udiNetatmoValve(udi_interface.Node):
     from udiNetatmoLib import bool2ISY, t_mode2ISY, update_ISY_data, node_queue, wait_for_node_done, battery2ISY, con_state2ISY
 
-    def __init__(self, polyglot, primary, address, name, myNetatmo, home,  valve_id):
+    def __init__(self, polyglot, primary, address, name, myNetatmo, home,  module_id):
         super().__init__(polyglot, primary, address, name)
         self.poly = polyglot
         self.myNetatmo= myNetatmo
-        self.valve_id = valve_id
+        self.module_id = module_id
         self.home_id = home['id']
         self._home = home
         self.primary = primary
@@ -281,11 +282,11 @@ class udiNetatmoValve(udi_interface.Node):
         #data = self.myNetatmo.get_module_data(self.module)
         logging.debug('Valve module data:')
         if self.node is not None:
-            if self.myNetatmo.get_valve_online(self.home_id, self.valve_id):
+            if self.myNetatmo.get_valve_online(self.home_id, self.module_id):
                 self.node.setDriver('ST',1)
-                self.node.setDriver('GV2', round(self.myNetatmo.get_valve_bat_level(self.home_id, self.valve_id)/1000, 2), True, True, 72)
-                self.node.setDriver('GV0', self.battery2ISY(self.myNetatmo.get_valve_bat_state(self.home_id, self.valve_id)))
-                self.node.setDriver('GV1', int(-self.myNetatmo.get_valve_rf_strength(self.home_id, self.valve_id)), True, True, 131)
+                self.node.setDriver('GV2', round(self.myNetatmo.get_valve_bat_level(self.home_id, self.module_id)/1000, 2), True, True, 72)
+                self.node.setDriver('GV0', self.battery2ISY(self.myNetatmo.get_valve_bat_state(self.home_id, self.module_id)))
+                self.node.setDriver('GV1', int(-self.myNetatmo.get_valve_rf_strength(self.home_id, self.module_id)), True, True, 131)
             else:
                 self.node.setDriver('GV2', 99, True, False, 25 )
                 self.node.setDriver('GV0', 99)
@@ -306,11 +307,11 @@ class udiNetatmoValve(udi_interface.Node):
 class udiNetatmoThermostat(udi_interface.Node):
     from udiNetatmoLib import bool2ISY, t_mode2ISY, update_ISY_data, node_queue, wait_for_node_done, battery2ISY, con_state2ISY
 
-    def __init__(self, polyglot, primary, address, name, myNetatmo, home,  valve_id):
+    def __init__(self, polyglot, primary, address, name, myNetatmo, home,  module_id):
         super().__init__(polyglot, primary, address, name)
         self.poly = polyglot
         self.myNetatmo= myNetatmo
-        self.valve_id = valve_id
+        self.module_id = module_id
         self.home_id = home['id']
         self._home = home
         self.primary = primary
@@ -357,11 +358,11 @@ class udiNetatmoThermostat(udi_interface.Node):
         #data = self.myNetatmo.get_module_data(self.module)
         logging.debug('Thermostat module data:')
         if self.node is not None:
-            if self.myNetatmo.get_valve_online(self.home_id, self.valve_id):
+            if self.myNetatmo.get_valve_online(self.home_id, self.module_id):
                 self.node.setDriver('ST',1)
-                self.node.setDriver('GV2', round(self.myNetatmo.get_valve_bat_level(self.home_id, self.valve_id)/1000, 2), True, True, 72)
-                self.node.setDriver('GV0', self.battery2ISY(self.myNetatmo.get_valve_bat_state(self.home_id, self.valve_id)))
-                self.node.setDriver('GV1', int(-self.myNetatmo.get_valve_rf_strength(self.home_id, self.valve_id)), True, True, 131)
+                self.node.setDriver('GV2', round(self.myNetatmo.get_valve_bat_level(self.home_id, self.module_id)/1000, 2), True, True, 72)
+                self.node.setDriver('GV0', self.battery2ISY(self.myNetatmo.get_valve_bat_state(self.home_id, self.module_id)))
+                self.node.setDriver('GV1', int(-self.myNetatmo.get_valve_rf_strength(self.home_id, self.module_id)), True, True, 131)
             else:
                 self.node.setDriver('GV2', 99, True, False, 25 )
                 self.node.setDriver('GV0', 99)

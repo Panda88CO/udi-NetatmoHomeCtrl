@@ -428,8 +428,8 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
     
 
     def update_home_data(self, home_id, h_data):
-        logging.debug('update_home_data : {}'.format(h_data))
-        if [home_id] not in self.home_data:
+        logging.debug('update_home_data :{}  {}'.format(home_id, h_data))
+        if home_id not in self.home_data:
             self.home_data[home_id] = {}
         for item in h_data:
             self.home_data[home_id][item] = h_data[item]

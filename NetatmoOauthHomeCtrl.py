@@ -434,11 +434,11 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         for item in h_data:
             if item not in self.home_data[home_id]:
                 self.home_data[home_id][item] = {}
-            if h_data[item] is list:
+            if type(h_data[item]) is list:
                 logging.debug('adding list {}'.format(h_data[item]))
                 for indx, list_item in enumerate(h_data[item]):
                     self.home_data[home_id][item][list_item] = h_data[item][list_item]
-            elif h_data[item] is dict:
+            elif type(h_data[item]) is dict:
                 logging.debug('adding dict {}'.format(h_data[item]))
                 for key in h_data[item]:
                     self.home_data[home_id][item][key] = h_data[item][key]

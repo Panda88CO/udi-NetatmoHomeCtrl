@@ -450,6 +450,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
             else:
                 logging.debug('adding item {}'.format(h_data[item]))
                 self.home_data[home_id][item] = h_data[item]
+        logging.debug('after update_home_data : {}'.format(self.home_data))
 
 
     '''

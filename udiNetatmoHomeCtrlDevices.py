@@ -28,6 +28,7 @@ class udiNetatmoPower(udi_interface.Node):
 
     def __init__(self, polyglot, primary, address, name, myNetatmo, home,  module_id):
         super().__init__(polyglot, primary, address, name)
+        logging.debug('__init__ udiNetatmoPower {} {} {} {} {}'.format(primary, address,name, home, module_id  ))
         self.poly = polyglot
         self.myNetatmo= myNetatmo
         self.module_id = module_id
@@ -99,7 +100,7 @@ class udiNetatmoRemote(udi_interface.Node):
 
     def __init__(self, polyglot, primary, address, name, myNetatmo, home,  module_id):
         super().__init__(polyglot, primary, address, name)
-        logging.debug('__init__ udiNetatmoRemote {} {} {} {}'.format(primary, address,name, home ))
+        logging.debug('__init__ udiNetatmoRemote {} {} {} {} {}'.format(primary, address,name, home, module_id  ))
         self.poly = polyglot
         self.myNetatmo= myNetatmo
         self.module_id = module_id
@@ -153,7 +154,7 @@ class udiNetatmoGateway(udi_interface.Node):
 
     def __init__(self, polyglot, primary, address, name, myNetatmo, home,  module_id):
         super().__init__(polyglot, primary, address, name)
-        logging.debug('__init__ udiNetatmoRemote {} {} {} {}'.format(primary, address,name, home ))
+        logging.debug('__init__ udiNetatmoGateway {} {} {} {} {}'.format(primary, address,name, home, module_id ))
         self.poly = polyglot
         self.myNetatmo= myNetatmo
         self.module_id = module_id
@@ -215,6 +216,7 @@ class udiNetatmoLights(udi_interface.Node):
 
     def __init__(self, polyglot, primary, address, name, myNetatmo, home,  module_id):
         super().__init__(polyglot, primary, address, name)
+        logging.debug('__init__ udiNetatmoLights {} {} {} {} {}'.format(primary, address,name, home, module_id ))
         self.poly = polyglot
         self.myNetatmo= myNetatmo
         self.module_id = module_id

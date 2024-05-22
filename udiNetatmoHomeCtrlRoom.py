@@ -131,6 +131,12 @@ class udiNetatmoHomeCtrlRoom(udi_interface.Node):
                     while not tmp_room.node_ready:
                         logging.debug( 'Waiting for node {}-{} to be ready'.format(dev_id, node_name))
                         time.sleep(1)                         
+                elif dev_info['room_id'] == self.room_id and dev_info['type'] in self.myNetatmo.gateway_list:
+                    logging.debug('adding gateway  node : {} {} {} {} {} {}'.format( self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_info['id']))
+                    tmp_room = udiNetatmoGateway(self.poly, self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_info['id'])                    
+                    while not tmp_room.node_ready:
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev_info['id'], node_name))
+                        time.sleep(1)        
 
 
 
@@ -346,6 +352,8 @@ class udiNetatmoEnergyRoom(udi_interface.Node):
                     while not tmp_room.node_ready:
                         logging.debug( 'Waiting for node {}-{} to be ready'.format(dev_info['id'], node_name))
                         time.sleep(1)        
+
+
                 
     def update(self, command = None):
         logging.debug('update room data {}'.format(self._home))

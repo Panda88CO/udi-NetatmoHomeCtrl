@@ -23,7 +23,7 @@ except ImportError:
 
 #from NetatmoOauth import NetatmoCloud
 from NetatmoOauthHomeCtrl import NetatmoOauthHomeCtrl
-from  udiNetatmoHomeCtrlRoom import udiNetatmoHomeCtrlRoom
+from  udiNetatmoHomeCtrlRoom import udiNetatmoHomeCtrlRoom, udiNetatmoEnergyRoom
 #from nodes.controller import Controller
 #from udi_interface import logging, Custom, Interface
 version = '0.1.8'
@@ -174,7 +174,10 @@ class NetatmoController(udi_interface.Node):
                         room_node = 'room'+ self.prepare_node_adr(room['id'], 10)
                         node_address = self.poly.getValidAddress(room_node)
                         logging.debug('adding room node : {} {} {} {} {} {}'.format(node_address, node_address, node_name,  self.myNetatmo, home, room['id']))
-                        temp = udiNetatmoHomeCtrlRoom(self.poly, node_address, node_address, node_name,  self.myNetatmo, home, room['id'])
+                        if self.myNetatmo.room_has_energy(home, room['id']):
+                            temp = udiNetatmoEnergyRoom(self.poly, node_address, node_address, node_name,  self.myNetatmo, home, room['id'])
+                        else:
+                            temp = udiNetatmoHomeCtrlRoom(self.poly, node_address, node_address, node_name,  self.myNetatmo, home, room['id'])
                         node_adr_list.append(node_address)
                         while not temp.node_ready:
                             logging.debug( 'Waiting for node {}-{} to be ready'.format(self.home_id, node_name))

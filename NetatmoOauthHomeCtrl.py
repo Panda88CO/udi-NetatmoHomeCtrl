@@ -60,7 +60,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         self.home_data = {}
 
 
-        self.dev_list = self.power_list+self.lights_list+self.remotes_list+self.gateway_list
+        self.dev_list = self.power_list+self.lights_list+self.remotes_list #+self.gateway_list
         logging.debug('_dev_list: {}'.format(self.dev_list))
         #self.customParameters= Custom(polyglot, 'customparams')
         #self.Notices = Custom(self.poly, 'notices')
@@ -286,6 +286,10 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         else:
             return('UNKNOWN')
 
+
+    def room_has_energy(self, home_id, room_id):
+        # return false for now
+        return(False)
 
     def get_time_since_last_update_sec(self, home_id):
         timenow = int(time.time())

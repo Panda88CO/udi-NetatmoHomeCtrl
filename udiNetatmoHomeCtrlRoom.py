@@ -103,7 +103,8 @@ class udiNetatmoHomeCtrlRoom(udi_interface.Node):
                 logging.debug('Device check {} {} {}'.format( self.room_id, dev_info, indx))
                 dev_name = dev_info['name']
                 node_name = self.poly.getValidName(dev_name)
-                dev_id = dev_info['id']
+                dev_id = str(dev_info['id'])
+                dev_id = dev_id.replace(':','')
                 node_address = self.poly.getValidAddress(dev_id)
                 logging.debug('addnodes loop - {} {}'.format(node_name, node_address))
                 if dev_info['room_id'] == self.room_id and dev_info['type'] in self.myNetatmo.power_list:

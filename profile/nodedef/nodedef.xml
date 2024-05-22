@@ -44,7 +44,7 @@
   <nodeDef id="ctrlroom" nls="nroom">
     <sts>
       <st id="ST" editor="connect" />
-      <st id="GV0" editor="wifi" />
+      <st id="GV10" editor="wifi" />
       <st id="GV3" editor="t_timestamp" />     
     </sts>
     <cmds>

@@ -4,6 +4,8 @@ ND-controller-ICON = EnergyMonitor
 ST-ctl-ST-NAME = NodeServer State
 CMD-ctl-UPDATE-NAME = Force Update 
 
+ND-ctrlroom-NAME = Room
+ND-ctrlroom-ICON = GenericCtl
 ND-room-NAME = Room
 ND-room-ICON = Thermostat
 ST-nroom-ST-NAME = Room State
@@ -14,7 +16,7 @@ ST-nroom-GV0-NAME = Energy Request
 ST-nroom-GV1-NAME = Windown Open
 ST-nroom-GV2-NAME = Predictive
 ST-nroom-GV3-NAME = Time Since Update
-
+ST-nroom-GV10-NAME = Wi-Fi strength
 CMD-nroom-UPDATE-NAME = Force Update 
 CMD-nroom-SETPOINT-NAME = Set Setpoint
 CMD-nroom-OPMODE-NAME = Set Mode 
@@ -22,6 +24,14 @@ CMDP-stemp-NAME = Setpoint temp
 CMDP-spmode-NAME = Setpoint mode
 CMDP-active_t-NAME = Active time
 CMDP-opmode-NAME = Operation mode
+
+
+ND-ctrlroom-NAME = Room
+ND-ctrlroom-ICON = GenericCtl
+
+
+
+
 
 
 ND-valve-NAME = Valve

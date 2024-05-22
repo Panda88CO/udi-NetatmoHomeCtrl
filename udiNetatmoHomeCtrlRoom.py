@@ -44,13 +44,9 @@ class udiNetatmoHomeCtrlRoom(udi_interface.Node):
         #logging.debug('self.module = {}'.format(self.module))
         self.id = 'ctrlroom'
         self.drivers = [
-            {'driver' : 'CLITEMP', 'value': 99,  'uom':25}, 
-            {'driver' : 'CLISPH', 'value': 99,  'uom':25}, 
-            {'driver' : 'CLIMD', 'value': 99,  'uom':25}, 
+
             {'driver' : 'GV0', 'value': 99,  'uom':25}, 
-            {'driver' : 'GV1', 'value': 0,  'uom':2}, 
-            {'driver' : 'GV2', 'value': 0,  'uom':2}, 
-            {'driver' : 'GV3', 'value': 99,  'uom':25},      
+            {'driver' : 'GV10', 'value': 99,  'uom':25},      
             {'driver' : 'ST', 'value': 99,  'uom':25}, 
             ]
         self.primary = primary
@@ -250,10 +246,16 @@ class udiNetatmoEnergyRoom(udi_interface.Node):
         #self.module = {'module_id':module_info['main_module'], 'type':'MAIN', 'home_id':module_info['home'] }
         #logging.debug('self.module = {}'.format(self.module))
         self.id = 'room'
-        self.drivers = [
 
+        self.drivers = [
+            {'driver' : 'CLITEMP', 'value': 99,  'uom':25}, 
+            {'driver' : 'CLISPH', 'value': 99,  'uom':25}, 
+            {'driver' : 'CLIMD', 'value': 99,  'uom':25}, 
             {'driver' : 'GV0', 'value': 99,  'uom':25}, 
-            {'driver' : 'GV3', 'value': 99,  'uom':25},      
+            {'driver' : 'GV1', 'value': 0,  'uom':2}, 
+            {'driver' : 'GV2', 'value': 0,  'uom':2}, 
+            {'driver' : 'GV3', 'value': 99,  'uom':25},
+            {'driver' : 'GV10', 'value': 99,  'uom':25},     
             {'driver' : 'ST', 'value': 99,  'uom':25}, 
             ]
         self.primary = primary

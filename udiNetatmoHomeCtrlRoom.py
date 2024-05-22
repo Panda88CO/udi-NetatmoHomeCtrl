@@ -45,7 +45,7 @@ class udiNetatmoHomeCtrlRoom(udi_interface.Node):
         self.id = 'ctrlroom'
         self.drivers = [
 
-            {'driver' : 'GV0', 'value': 99,  'uom':25}, 
+            {'driver' : 'GV3', 'value': 99,  'uom':25}, 
             {'driver' : 'ST', 'value': 99,  'uom':25}, 
             ]
         self.primary = primary
@@ -157,30 +157,8 @@ class udiNetatmoHomeCtrlRoom(udi_interface.Node):
 
 
             self.node.setDriver('ST', 1)
-            #logging.debug('TempUnit = {} {}'.format(self.myNetatmo.temp_unit, self.convert_temp_unit(self.myNetatmo.temp_unit)))
-            #if self.convert_temp_unit(self.myNetatmo.temp_unit) == 0:
-            #    self.node.setDriver('CLITEMP', round(self.myNetatmo.get_room_temp(self.home_id, self.room_id),1), True, False, 4 )
-            #    self.node.setDriver('CLISPH', round(int(self.myNetatmo.get_room_setpoint_temp(self.home_id, self.room_id)*2)/2,1), True, False, 4 )
-            #else:
-            #    self.node.setDriver('CLITEMP', round(int(2*(self.myNetatmo.get_room_temp(self.home_id, self.room_id)*9/5+32))/2,1), True, False, 17 )
-            #    self.node.setDriver('CLISPH', round(int(2*(self.myNetatmo.get_room_setpoint_temp(self.home_id, self.room_id)*9/5+32))/2,0), True, False, 17 )
-            #self.node.setDriver('CLIMD', self.t_mode2ISY(self.myNetatmo.get_room_setpoint_mode(self.home_id, self.room_id)))
-            #self.node.setDriver('GV0', self.myNetatmo.get_room_heat_power_request(self.home_id, self.room_id), True, False, 0)
-            #self.node.setDriver('GV1', self.bool2ISY(self.myNetatmo.get_room_open_window(self.home_id, self.room_id)))
-            #self.node.setDriver('GV2', self.bool2ISY(self.myNetatmo.get_room_anticipating(self.home_id, self.room_id)))
-            self.node.setDriver('GV3', int(self.myNetatmo.get_time_since_last_update_sec(self.home_id)/60), True, True, 44)
-            self.node.setDriver('GV10', int(self.myNetatmo.get_wifi_strength(self.home_id, self.room_id)))
-            '''
-            else:
-                self.node.setDriver('CLITEMP', 99, True, False, 25 )
-                self.node.setDriver('CLISPH', 99, True, False, 25 )
-                self.node.setDriver('CLIMD', 99, True, False, 25 )
-                self.node.setDriver('GV0', 99, True, False, 25 )
-                self.node.setDriver('GV1', 99, True, False, 25 )
-                self.node.setDriver('GV2', 99, True, False, 25 )
-                self.node.setDriver('GV3', 99, True, False, 25 )
-                self.node.setDriver('ST', 0) 
-            '''
+            self.NET_setDriver('GV3', int(self.myNetatmo.get_time_since_last_update_sec(self.home_id)/60), 44)
+
 
 
 
@@ -370,30 +348,19 @@ class udiNetatmoEnergyRoom(udi_interface.Node):
         if self.node is not None:
 
 
-            self.node.setDriver('ST', 1)
-            #logging.debug('TempUnit = {} {}'.format(self.myNetatmo.temp_unit, self.convert_temp_unit(self.myNetatmo.temp_unit)))
-            #if self.convert_temp_unit(self.myNetatmo.temp_unit) == 0:
-            #    self.node.setDriver('CLITEMP', round(self.myNetatmo.get_room_temp(self.home_id, self.room_id),1), True, False, 4 )
-            #    self.node.setDriver('CLISPH', round(int(self.myNetatmo.get_room_setpoint_temp(self.home_id, self.room_id)*2)/2,1), True, False, 4 )
-            #else:
-            #    self.node.setDriver('CLITEMP', round(int(2*(self.myNetatmo.get_room_temp(self.home_id, self.room_id)*9/5+32))/2,1), True, False, 17 )
-            #    self.node.setDriver('CLISPH', round(int(2*(self.myNetatmo.get_room_setpoint_temp(self.home_id, self.room_id)*9/5+32))/2,0), True, False, 17 )
-            #self.node.setDriver('CLIMD', self.t_mode2ISY(self.myNetatmo.get_room_setpoint_mode(self.home_id, self.room_id)))
-            #self.node.setDriver('GV0', self.myNetatmo.get_room_heat_power_request(self.home_id, self.room_id), True, False, 0)
-            #self.node.setDriver('GV1', self.bool2ISY(self.myNetatmo.get_room_open_window(self.home_id, self.room_id)))
-            #self.node.setDriver('GV2', self.bool2ISY(self.myNetatmo.get_room_anticipating(self.home_id, self.room_id)))
-            #self.node.setDriver('GV3', int(self.myNetatmo.get_time_since_last_update_sec(self.home_id)/60), True, True, 44)
-            '''
+            self.NET_setDriver('ST', 1)
+            logging.debug('TempUnit = {} {}'.format(self.myNetatmo.temp_unit, self.convert_temp_unit(self.myNetatmo.temp_unit)))
+            if self.convert_temp_unit(self.myNetatmo.temp_unit) == 0:
+                self.node.setDriver('CLITEMP', round(self.myNetatmo.get_room_temp(self.home_id, self.room_id),1), True, False, 4 )
+                self.node.setDriver('CLISPH', round(int(self.myNetatmo.get_room_setpoint_temp(self.home_id, self.room_id)*2)/2,1), True, False, 4 )
             else:
-                self.node.setDriver('CLITEMP', 99, True, False, 25 )
-                self.node.setDriver('CLISPH', 99, True, False, 25 )
-                self.node.setDriver('CLIMD', 99, True, False, 25 )
-                self.node.setDriver('GV0', 99, True, False, 25 )
-                self.node.setDriver('GV1', 99, True, False, 25 )
-                self.node.setDriver('GV2', 99, True, False, 25 )
-                self.node.setDriver('GV3', 99, True, False, 25 )
-                self.node.setDriver('ST', 0) 
-            '''
+                self.node.setDriver('CLITEMP', round(int(2*(self.myNetatmo.get_room_temp(self.home_id, self.room_id)*9/5+32))/2,1), True, False, 17 )
+                self.node.setDriver('CLISPH', round(int(2*(self.myNetatmo.get_room_setpoint_temp(self.home_id, self.room_id)*9/5+32))/2,0), True, False, 17 )
+            self.NET_setDriver('CLIMD', self.t_mode2ISY(self.myNetatmo.get_room_setpoint_mode(self.home_id, self.room_id)))
+            self.NET_setDriver('GV0', self.myNetatmo.get_room_heat_power_request(self.home_id, self.room_id),  0)
+            self.NET_setDriver('GV1', self.bool2ISY(self.myNetatmo.get_room_open_window(self.home_id, self.room_id)))
+            self.NET_setDriver('GV2', self.bool2ISY(self.myNetatmo.get_room_anticipating(self.home_id, self.room_id)))
+            self.NET_setDriver('GV3', int(self.myNetatmo.get_time_since_last_update_sec(self.home_id)/60), 44)
 
 
 

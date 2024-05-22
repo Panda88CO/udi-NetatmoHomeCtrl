@@ -85,7 +85,7 @@ class udiNetatmoPower(udi_interface.Node):
 
 
     def update(self, command = None):
-        self.myNetatmo.self.myNetatmo.get_home_status(self._home['id'])
+        self.myNetatmo.get_home_status(self._home['id'])
         self.update_ISY_data()       
 
 
@@ -153,7 +153,7 @@ class udiNetatmoRemote(udi_interface.Node):
                 
 
     def update(self, command = None):
-        self.myNetatmo.self.myNetatmo.get_home_status(self._home['id'])
+        self.myNetatmo.get_home_status(self._home['id'])
         self.update_ISY_data()
 
     commands = {        
@@ -228,7 +228,7 @@ class udiNetatmoLights(udi_interface.Node):
 
 
     def update(self, command = None):
-        self.myNetatmo.self.myNetatmo.get_home_status(self._home['id'])
+        self.myNetatmo.get_home_status(self._home['id'])
         self.update_ISY_data()
 
     commands = {        
@@ -304,7 +304,7 @@ class udiNetatmoValve(udi_interface.Node):
                 
 
     def update(self, command = None):
-        self.myNetatmo.self.myNetatmo.get_home_status(self._home['id'])
+        self.myNetatmo.get_home_status(self._home['id'])
         self.update_ISY_data()
 
 
@@ -380,7 +380,7 @@ class udiNetatmoThermostat(udi_interface.Node):
                 
 
     def update(self, command = None):
-        self.myNetatmo.self.myNetatmo.get_home_status(self._home['id'])
+        self.myNetatmo.get_home_status(self._home['id'])
         self.update_ISY_data()
 
 

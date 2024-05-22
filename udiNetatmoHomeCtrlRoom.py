@@ -305,42 +305,40 @@ class udiNetatmoEnergyRoom(udi_interface.Node):
                 
                 logging.debug('Device check {} {} {}'.format( self.room_id, dev_info, indx))
                 dev_name = dev_info['name']
-                node_name = self.poly.getValidName(dev_name)
-                dev_id = self.prepare_node_adr(dev_info['id'], 14)
-                node_address = self.poly.getValidAddress(dev_id)
+                node_name = self.poly.getValidName(dev_name)                
+                node_adr = self.prepare_node_adr(dev_info['id'], 14)
+                node_address = self.poly.getValidAddress(node_adr)
                 logging.debug('addnodes loop - {} {}'.format(node_name, node_address))
                 if dev_info['room_id'] == self.room_id and dev_info['type'] in self.myNetatmo.power_list:
-                    logging.debug('adding power node : {} {} {} {} {} {}'.format( self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id))
-                    tmp_room = udiNetatmoPower(self.poly, self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id)
+                    logging.debug('adding power node : {} {} {} {} {} {}'.format( self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_info['id']))
+                    tmp_room = udiNetatmoPower(self.poly, self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_info['id'])
                     while not tmp_room.node_ready:
-                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev_id, node_name))
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(node_address, node_name))
                         time.sleep(1)
                 elif dev_info['room_id'] == self.room_id and dev_info['type'] in self.myNetatmo.lights_list:
-                    logging.debug('adding lights  node : {} {} {} {} {} {}'.format( self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id))
-                    tmp_room = udiNetatmoLights(self.poly, self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id)
+                    logging.debug('adding lights  node : {} {} {} {} {} {}'.format( self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_info['id']))
+                    tmp_room = udiNetatmoLights(self.poly, self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_info['id'])
                     while not tmp_room.node_ready:
-                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev_id, node_name))
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(node_address, node_name))
                         time.sleep(1)                    
                 elif dev_info['room_id'] == self.room_id and dev_info['type'] in self.myNetatmo.remotes_list:
-                    logging.debug('adding remotes node : {} {} {} {} {} {}'.format( self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id))
-                    tmp_room = udiNetatmoRemote(self.poly, self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id)                    
+                    logging.debug('adding remotes node : {} {} {} {} {} {}'.format( self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_info['id']))
+                    tmp_room = udiNetatmoRemote(self.poly, self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_info['id'])                    
                     while not tmp_room.node_ready:
-                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev_id, node_name))
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(node_address, node_name))
                         time.sleep(1)                    
                 elif dev_info['room_id'] == self.room_id and dev_info['type'] in self.myNetatmo.valves_list:
-                    logging.debug('adding valve  node : {} {} {} {} {} {}'.format( self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id))
-                    tmp_room = udiNetatmoValve(self.poly, self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id)                    
+                    logging.debug('adding valve  node : {} {} {} {} {} {}'.format( self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_info['id']))
+                    tmp_room = udiNetatmoValve(self.poly, self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_info['id'])                    
                     while not tmp_room.node_ready:
-                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev_id, node_name))
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(node_address, node_name))
                         time.sleep(1)                   
                 elif dev_info['room_id'] == self.room_id and dev_info['type'] in self.myNetatmo.thermostat_list:
-                    logging.debug('adding thermostat  node : {} {} {} {} {} {}'.format( self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id))
-                    tmp_room = udiNetatmoThermostat(self.poly, self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id)                    
+                    logging.debug('adding thermostat  node : {} {} {} {} {} {}'.format( self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_info['id']))
+                    tmp_room = udiNetatmoThermostat(self.poly, self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_info['id'])                    
                     while not tmp_room.node_ready:
-                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev_id, node_name))
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev_info['id'], node_name))
                         time.sleep(1)                         
-
-
 
                 
     def update(self, command = None):

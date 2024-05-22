@@ -186,15 +186,15 @@ class NetatmoController(udi_interface.Node):
         while not self.configDone:
             logging.info('Waiting for config to comlete')
             time.sleep(1)
-        #ogging.debug('Checking for nodes not used - node list {} - {} {}'.format(primary_node_list, len(self.nodes_in_db), self.nodes_in_db))
+        logging.debug('Checking for nodes not used - node list {} - {} {}'.format(primary_node_list, len(self.nodes_in_db), self.nodes_in_db))
         for nde, node in enumerate(self.nodes_in_db):
             #node = self.nodes_in_db[nde]
             logging.debug('Scanning db for extra nodes : {}'.format(node))
             if node['primaryNode'] not in primary_node_list:
-                logging.debug('Removing node : {} {}'.format(node['name'], node))
+                logging.debug('Removing primary node : {} {}'.format(node['name'], node))
                 self.poly.delNode(node['address'])
             elif node['address'] not in module_adr_list:
-                logging.debug('Removing node : {} {}'.format(node['name'], node))
+                logging.debug('Removing sub node : {} {}'.format(node['name'], node))
                 self.poly.delNode(node['address'])
 
         self.nodeDefineDone = True

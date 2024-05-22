@@ -362,10 +362,10 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
             logging.debug('get_state no data for {} {}'.format(home_id, module_id))
 
 
-    def get_module_online(self, home_id, valve_id):
-        logging.debug('get_module_online - data{} {} {}'.format(home_id, valve_id, self.home_data) )
-        if valve_id in self.home_data[home_id]['modules']:
-                return( self.home_data[home_id]['modules'][valve_id]['reachable'])
+    def get_module_online(self, home_id, module_id):
+        logging.debug('get_module_online - data {} {} {}'.format(home_id, module_id, self.home_data) )
+        if module_id in self.home_data[home_id]['modules']:
+                return( self.home_data[home_id]['modules'][module_id]['reachable'])
         else:
             return(None)
 

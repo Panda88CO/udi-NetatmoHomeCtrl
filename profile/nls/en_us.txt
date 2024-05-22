@@ -25,21 +25,18 @@ CMDP-spmode-NAME = Setpoint mode
 CMDP-active_t-NAME = Active time
 CMDP-opmode-NAME = Operation mode
 
-
-ND-ctrlroom-NAME = Room
-ND-ctrlroom-ICON = GenericCtl
-
-
-
-
-
+ND-gateway-NAME = Gateway
+ND-gateway-ICON = GenericCtl
+ST-ngateway-ST-NAME = State
+ST-ngateway-GV10-NAME = Wi-Fi strength
+CMD-ngateway-UPDATE-NAME = Force Update 
 
 ND-valve-NAME = Valve
 ND-valve-ICON = Thermostat
-ST-nvalve-ST-NAME = Valve State
+ST-nvalve-ST-NAME = State
 ST-nvalve-GV0-NAME = Battery Level 
 ST-nvalve-GV1-NAME = RF Strength 
-ST-nvalve-Gv2-NAME = Battery Reading
+ST-nvalve-GV2-NAME = Battery Reading
 CMD-nvalve-UPDATE-NAME = Force Update 
 
 ND-power-NAME = Outlet

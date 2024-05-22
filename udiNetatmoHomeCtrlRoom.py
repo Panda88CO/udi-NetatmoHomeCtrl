@@ -46,7 +46,6 @@ class udiNetatmoHomeCtrlRoom(udi_interface.Node):
         self.drivers = [
 
             {'driver' : 'GV0', 'value': 99,  'uom':25}, 
-            {'driver' : 'GV10', 'value': 99,  'uom':25},      
             {'driver' : 'ST', 'value': 99,  'uom':25}, 
             ]
         self.primary = primary
@@ -163,7 +162,8 @@ class udiNetatmoHomeCtrlRoom(udi_interface.Node):
             #self.node.setDriver('GV0', self.myNetatmo.get_room_heat_power_request(self.home_id, self.room_id), True, False, 0)
             #self.node.setDriver('GV1', self.bool2ISY(self.myNetatmo.get_room_open_window(self.home_id, self.room_id)))
             #self.node.setDriver('GV2', self.bool2ISY(self.myNetatmo.get_room_anticipating(self.home_id, self.room_id)))
-            #self.node.setDriver('GV3', int(self.myNetatmo.get_time_since_last_update_sec(self.home_id)/60), True, True, 44)
+            self.node.setDriver('GV3', int(self.myNetatmo.get_time_since_last_update_sec(self.home_id)/60), True, True, 44)
+            self.node.setDriver('GV10', int(self.myNetatmo.get_wifi_strength(self.home_id, self.room_id)))
             '''
             else:
                 self.node.setDriver('CLITEMP', 99, True, False, 25 )
@@ -255,7 +255,6 @@ class udiNetatmoEnergyRoom(udi_interface.Node):
             {'driver' : 'GV1', 'value': 0,  'uom':2}, 
             {'driver' : 'GV2', 'value': 0,  'uom':2}, 
             {'driver' : 'GV3', 'value': 99,  'uom':25},
-            {'driver' : 'GV10', 'value': 99,  'uom':25},     
             {'driver' : 'ST', 'value': 99,  'uom':25}, 
             ]
         self.primary = primary

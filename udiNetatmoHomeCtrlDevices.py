@@ -150,7 +150,63 @@ class udiNetatmoRemote(udi_interface.Node):
                 self.node.setDriver('GV2', 99, True, False, 25 )
                 self.node.setDriver('GV0', 99)
                 self.node.setDriver('ST', 0)
-                
+
+class udiNetatmoGateway(udi_interface.Node):
+    from udiNetatmoLib import bool2ISY, t_mode2ISY, NET_setDriver, update_ISY_data, node_queue, wait_for_node_done, battery2ISY, con_state2ISY
+
+    def __init__(self, polyglot, primary, address, name, myNetatmo, home,  module_id):
+        super().__init__(polyglot, primary, address, name)
+        logging.debug('__init__ udiNetatmoRemote {} {} {} {}'.format(primary, address,name, home ))
+        self.poly = polyglot
+        self.myNetatmo= myNetatmo
+        self.module_id = module_id
+        self.home_id = home['id']
+        self._home = home
+        self.primary = primary
+        self.address = address
+        self.name = name        
+        self.n_queue = []
+        self.id = 'gateway'
+        self.drivers = [
+
+            {'driver' : 'GV10', 'value': 99,  'uom':25},
+            {'driver' : 'ST', 'value': 99,  'uom':25},
+            ]
+
+        self.node_ready = False
+        self.poly.subscribe(self.poly.START, self.start, address)
+        #self.poly.subscribe(self.poly.STOP, self.stop)
+        self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
+        self.poly.ready()
+        self.poly.addNode(self)
+        self.wait_for_node_done()
+        self.node = self.poly.getNode(address)
+        logging.info('Start {} Remote Node'.format(self.name))  
+        time.sleep(1)
+        self.nodeDefineDone = True
+        self.node_ready = True
+
+
+    def start(self):
+        logging.debug('Executing udiNetatmoRemote start')
+        self.updateISYdrivers()        
+
+
+    def updateISYdrivers(self):
+        logging.debug('updateISYdrivers')
+
+        #data = self.myNetatmo.get_module_data(self.module)
+        logging.debug('Remotes module data:')
+        if self.node is not None:
+            if self.myNetatmo.get_module_online(self.home_id, self.module_id):
+                self.node.setDriver('ST',1)
+                self.node.setDriver('GV2', round(self.myNetatmo.get_valve_bat_level(self.home_id, self.module_id)/1000, 2), True, True, 72)
+                self.node.setDriver('GV0', self.battery2ISY(self.myNetatmo.get_valve_bat_state(self.home_id, self.module_id)))
+            else:
+                self.node.setDriver('GV2', 99, True, False, 25 )
+                self.node.setDriver('GV0', 99)
+                self.node.setDriver('ST', 0)
+
 
     def update(self, command = None):
         self.myNetatmo.get_home_status(self._home['id'])

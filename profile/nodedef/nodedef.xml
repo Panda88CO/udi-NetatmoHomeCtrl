@@ -31,7 +31,6 @@
               <p id="stemp" editor="set_temp" init="CLISPH"/>             
                <p id="spmode" editor="th_mode" init="0" /> 
                <p id="active_t" editor="t_min" init="0" />   
-
         </cmd>      
         <cmd id="OPMODE" >
                 <p id="opmode" editor="setCLIMD" init="CLIMD"/> 
@@ -42,7 +41,21 @@
   </nodeDef>
 
 
+  <nodeDef id="ctrlroom" nls="nroom">
+    <sts>
+      <st id="ST" editor="connect" />
+      <st id="GV0" editor="wifi" />
+      <st id="GV3" editor="t_timestamp" />     
+    </sts>
+    <cmds>
+      <sends />
+      <accepts>
+        <cmd id="UPDATE" />  
 
+        </cmd>          
+</accepts>
+    </cmds>
+  </nodeDef>
 
 
   <nodeDef id="valve" nls="nvalve">

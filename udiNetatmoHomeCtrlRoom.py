@@ -42,7 +42,7 @@ class udiNetatmoHomeCtrlRoom(udi_interface.Node):
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
         #self.module = {'module_id':module_info['main_module'], 'type':'MAIN', 'home_id':module_info['home'] }
         #logging.debug('self.module = {}'.format(self.module))
-        self.id = 'room'
+        self.id = 'ctrlroom'
         self.drivers = [
             {'driver' : 'CLITEMP', 'value': 99,  'uom':25}, 
             {'driver' : 'CLISPH', 'value': 99,  'uom':25}, 
@@ -251,12 +251,8 @@ class udiNetatmoEnergyRoom(udi_interface.Node):
         #logging.debug('self.module = {}'.format(self.module))
         self.id = 'room'
         self.drivers = [
-            {'driver' : 'CLITEMP', 'value': 99,  'uom':25}, 
-            {'driver' : 'CLISPH', 'value': 99,  'uom':25}, 
-            {'driver' : 'CLIMD', 'value': 99,  'uom':25}, 
+
             {'driver' : 'GV0', 'value': 99,  'uom':25}, 
-            {'driver' : 'GV1', 'value': 0,  'uom':2}, 
-            {'driver' : 'GV2', 'value': 0,  'uom':2}, 
             {'driver' : 'GV3', 'value': 99,  'uom':25},      
             {'driver' : 'ST', 'value': 99,  'uom':25}, 
             ]
@@ -436,8 +432,6 @@ class udiNetatmoEnergyRoom(udi_interface.Node):
 
     commands = {        
                 'UPDATE'    : update,
-                'SETPOINT'  : set_setpoint,
-                'OPMODE'    : set_opmode,
                 }
 
         

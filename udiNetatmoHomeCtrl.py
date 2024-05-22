@@ -251,23 +251,22 @@ class NetatmoController(udi_interface.Node):
                     #self.myNetatmo.refresh_token()
                     self.myNetatmo.get_homes_info()
                     for home_id in self.myNetatmo.homes_list:
-                        self.myNetatmo.get_home_status(home_id)
+                        self.myNetatmo.get_home_status(self.myNetatmo.homes_list[home_id])
                         #self.myNetatmo.update_weather_info_instant(home)
-
-
                     #nodes = self.poly.getNodes()
                     for nde in nodes:
                         if nde.address != 'controller':   # but not the setup node
                             logging.debug('updating node {} data'.format(nde))
                             nde.updateISYdrivers()
+                            #nde.updateEnergy()
                                                 
                 if 'shortPoll' in polltype:
                     self.heartbeat()
                     #self.myNetatmo.refresh_token()
                     logging.debug('shortpoll  {}'.format(self.myNetatmo.homes_list))
                     for home_id in self.myNetatmo.homes_list:
-                        logging.debug('shortpoll loop {}'.format(home_id))
-                        self.myNetatmo.get_home_status(home_id)
+                        logging.debug('shortpoll loop {}'.format(self.myNetatmo.homes_list[home_id]))
+                        self.myNetatmo.get_home_status(self.myNetatmo.homes_list[home_id])
                     for nde in nodes:
                         if nde.address != 'controller':   # but not the setup node
                             logging.debug('updating node {} data'.format(nde))

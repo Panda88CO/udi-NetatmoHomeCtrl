@@ -41,6 +41,10 @@
     </cmds>
   </nodeDef>
 
+
+
+
+
   <nodeDef id="valve" nls="nvalve">
     <sts>
       <st id="ST" editor="connect" />
@@ -56,6 +60,46 @@
     </cmds>
   </nodeDef>
 
-  
+  <nodeDef id="power" nls="npower">
+    <sts>
+      <st id="ST" editor="connect" />
+      <st id="GV0" editor="battery" />
+      <st id="GV1" editor="rf_strength" />
+      <st id="GV2" editor="bat_value" />
+    </sts>
+    <cmds>
+      <sends />
+      <accepts> 
+        <cmd id="UPDATE" />        
+      </accepts>
+    </cmds>
+  </nodeDef>
+
+  <nodeDef id="light" nls="nlight">
+    <sts>
+      <st id="ST" editor="connect" />
+      <st id="GV0" editor="on_off" />
+      <st id="GV1" editor="brightness" />
+    </sts>
+    <cmds>
+      <sends />
+      <accepts> 
+        <cmd id="UPDATE" />        
+      </accepts>
+    </cmds>
+  </nodeDef>
+    <nodeDef id="remote" nls="nremotevalve">
+    <sts>
+      <st id="ST" editor="connect" />
+      <st id="GV0" editor="battery" />
+      <st id="GV2" editor="bat_value" />
+    </sts>
+    <cmds>
+      <sends />
+      <accepts> 
+        <cmd id="UPDATE" />        
+      </accepts>
+    </cmds>
+  </nodeDef>
 
 </nodeDefs>

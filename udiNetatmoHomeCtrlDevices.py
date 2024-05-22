@@ -103,10 +103,9 @@ class udiNetatmoRemote(udi_interface.Node):
         self.id = 'remote'
         self.drivers = [
 
-            {'driver' : 'GV0', 'value': 99,  'uom':25}, 
-            {'driver' : 'GV2', 'value': 99,  'uom':25}, 
-            {'driver' : 'GV1', 'value': 99,  'uom':25},       
-            {'driver' : 'ST', 'value': 99,  'uom':25}, 
+            {'driver' : 'GV0', 'value': 99,  'uom':25},
+            {'driver' : 'GV2', 'value': 99,  'uom':25},
+            {'driver' : 'ST', 'value': 99,  'uom':25},
             ]
 
         self.node_ready = False
@@ -136,13 +135,11 @@ class udiNetatmoRemote(udi_interface.Node):
         if self.node is not None:
             if self.myNetatmo.get_module_online(self.home_id, self.module_id):
                 self.node.setDriver('ST',1)
-                #self.node.setDriver('GV2', round(self.myNetatmo.get_valve_bat_level(self.home_id, self.module_id)/1000, 2), True, True, 72)
-                #self.node.setDriver('GV0', self.battery2ISY(self.myNetatmo.get_valve_bat_state(self.home_id, self.module_id)))
-                #self.node.setDriver('GV1', int(-self.myNetatmo.get_valve_rf_strength(self.home_id, self.module_id)), True, True, 131)
+                self.node.setDriver('GV2', round(self.myNetatmo.get_valve_bat_level(self.home_id, self.module_id)/1000, 2), True, True, 72)
+                self.node.setDriver('GV0', self.battery2ISY(self.myNetatmo.get_valve_bat_state(self.home_id, self.module_id)))
             else:
                 self.node.setDriver('GV2', 99, True, False, 25 )
                 self.node.setDriver('GV0', 99)
-                self.node.setDriver('GV1', 99, True, False, 25 )
                 self.node.setDriver('ST', 0)
                 
 
@@ -169,9 +166,8 @@ class udiNetatmoLights(udi_interface.Node):
         self.id = 'switch'
         self.drivers = [
 
-            {'driver' : 'GV0', 'value': 99,  'uom':25}, 
-            {'driver' : 'GV2', 'value': 99,  'uom':25}, 
-            {'driver' : 'GV1', 'value': 99,  'uom':25},       
+            {'driver' : 'GV0', 'value': 99, 'uom':25}, 
+            {'driver' : 'GV1', 'value': 99, 'uom':25},       
             {'driver' : 'ST', 'value': 99,  'uom':25}, 
             ]
 
@@ -208,11 +204,9 @@ class udiNetatmoLights(udi_interface.Node):
         if self.node is not None:
             if self.myNetatmo.get_module_online(self.home_id, self.module_id):
                 self.node.setDriver('ST',1)
-                #self.node.setDriver('GV2', round(self.myNetatmo.get_valve_bat_level(self.home_id, self.module_id)/1000, 2), True, True, 72)
-                #self.node.setDriver('GV0', self.battery2ISY(self.myNetatmo.get_valve_bat_state(self.home_id, self.module_id)))
-                #self.node.setDriver('GV1', int(-self.myNetatmo.get_valve_rf_strength(self.home_id, self.module_id)), True, True, 131)
+                self.node.setDriver('GV0', self.battery2ISY(self.myNetatmo.get_state(self.home_id, self.module_id)))
+                self.node.setDriver('GV1', int(-self.myNetatmo.get_brightness(self.home_id, self.module_id)), True, True, 131)
             else:
-                self.node.setDriver('GV2', 99, True, False, 25 )
                 self.node.setDriver('GV0', 99)
                 self.node.setDriver('GV1', 99, True, False, 25 )
                 self.node.setDriver('ST', 0)

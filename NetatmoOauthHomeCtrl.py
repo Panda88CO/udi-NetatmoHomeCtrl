@@ -50,7 +50,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         self.scopeList = [ 'read_magellan', 'write_magellan', 'read_smarther', 'write_smarther', 'read_mhs1', 'write_mhs1', 'read_thermostat', 'write_thermostat']
         
 
-        self.GW_modules = ['NAPlug', 'NLG', 'NLGS', 'NLE']
+        self.gateway_list = ['NAPlug', 'NLG', 'NLGS', 'NLE']
         self.power_list =['NLP', 'NLPS', 'NLPM']
         self.lights_list = ['NLF']
         self.remotes_list = ['NLT']
@@ -60,7 +60,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         self.home_data = {}
 
 
-        self.dev_list = self.power_list+self.lights_list+self.remotes_list
+        self.dev_list = self.power_list+self.lights_list+self.remotes_list+self.gateway_list
         logging.debug('_dev_list: {}'.format(self.dev_list))
         #self.customParameters= Custom(polyglot, 'customparams')
         #self.Notices = Custom(self.poly, 'notices')
@@ -271,7 +271,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
     
 
     def module_type (self, type):
-        if type in self.GW_modules:
+        if type in self.gateway_list:
             return('GATEWAY')
         elif type in self.valves:
             return('VALVE')
@@ -495,11 +495,11 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         return(self.homes_w_ctrl)
     '''
 
-    def get_GW_modules(self, home_id):
+    def get_gateway_list(self, home_id):
         
-        tmp = self._get_modules(home_id, self.GW_modules)
-        logging.debug('get_GW_modules {}'.format(tmp))
-        return(self._get_modules(home_id, self.GW_modules))
+        tmp = self._get_modules(home_id, self.gateway_list)
+        logging.debug('get_gateway_list {}'.format(tmp))
+        return(self._get_modules(home_id, self.gateway_list))
     
 
 

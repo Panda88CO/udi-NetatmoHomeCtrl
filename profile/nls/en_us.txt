@@ -23,6 +23,7 @@ CMDP-spmode-NAME = Setpoint mode
 CMDP-active_t-NAME = Active time
 CMDP-opmode-NAME = Operation mode
 
+
 ND-valve-NAME = Valve
 ND-valve-ICON = Thermostat
 ST-nvalve-ST-NAME = Valve State
@@ -30,6 +31,38 @@ ST-nvalve-GV0-NAME = Battery Level
 ST-nvalve-GV1-NAME = RF Strength 
 ST-nvalve-Gv2-NAME = Battery Reading
 CMD-nvalve-UPDATE-NAME = Force Update 
+
+ND-power-NAME = Outlet
+ND-power-ICON = Switch
+ST-npower-ST-NAME = Connected
+ST-npower-GV0-NAME = State 
+ST-npower-GV1-NAME = Inst Power 
+ST-npower-Gv2-NAME = Avg Power
+CMD-npower-UPDATE-NAME = Force Update 
+CMD-npower-OUTLETCTRL-NAME = Set State
+
+ND-light-NAME = Light Switch
+ND-light-ICON = Switch
+ST-nlight-ST-NAME = Connected
+ST-nlight-GV0-NAME = Statel 
+ST-nlight-GV1-NAME = Brightness 
+
+CMD-nlight-UPDATE-NAME = Force Update 
+CMD-nlight-LIGHTCTRL-NAME = Set State
+CMDP-Lstate-NAME = Set state
+CMDP-Lbrightness-NAME = Set brightness
+
+ND-remote-NAME = Remote
+ND-remote-ICON = GenericCtl
+ST-nremote-ST-NAME = Connected
+ST-nremote-GV0-NAME = Battery Level
+ST-nremote-GV2-NAME = Batter Voltage
+
+on_off-0 = On
+on_off-1 = Off
+on_off-99 = Unknown
+
+
 
 connect-0 = Not Connected
 connect-1 = Connected

@@ -63,14 +63,17 @@
   <nodeDef id="power" nls="npower">
     <sts>
       <st id="ST" editor="connect" />
-      <st id="GV0" editor="battery" />
-      <st id="GV1" editor="rf_strength" />
-      <st id="GV2" editor="bat_value" />
+      <st id="GV0" editor="on_off" />
+      <st id="GV1" editor="power" />
+      <st id="GV2" editor="power" />
     </sts>
     <cmds>
       <sends />
       <accepts> 
-        <cmd id="UPDATE" />        
+        <cmd id="UPDATE" />   
+        <cmd id="OUTLETCTRL" >
+                <p id="" editor="on_off" init="GV0"/> 
+        </cmd>                  
       </accepts>
     </cmds>
   </nodeDef>
@@ -84,11 +87,16 @@
     <cmds>
       <sends />
       <accepts> 
-        <cmd id="UPDATE" />        
+        <cmd id="UPDATE" />
+        <cmd id="LIGHTCTRL" >
+                <p id="Lstate" editor="on_off" init="GV0"/> 
+                <p id="Lbrightness" editor="brightness" init="GV1" />   
+        </cmd>                
       </accepts>
     </cmds>
   </nodeDef>
-    <nodeDef id="remote" nls="nremotevalve">
+
+    <nodeDef id="remote" nls="nremote">
     <sts>
       <st id="ST" editor="connect" />
       <st id="GV0" editor="battery" />

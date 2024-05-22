@@ -38,7 +38,7 @@ version = '0.1.8'
 #        ]
 
 class NetatmoController(udi_interface.Node):
-    from udiNetatmoLib import bool2ISY, prepare_node_adr, t_mode2ISY, node_queue, wait_for_node_done, con_state2ISY, convert_temp_unit, heartbeat
+    from udiNetatmoLib import bool2ISY, prepare_node_adr, NET_setDriver, t_mode2ISY, node_queue, wait_for_node_done, con_state2ISY, convert_temp_unit, heartbeat
 
     def __init__(self, polyglot, primary, address, name):
         super(NetatmoController, self).__init__(polyglot, primary, address, name)

@@ -346,6 +346,21 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         else:
             return(None)
 
+    def get_brightness (self, home_id, module_id):
+        logging.debug('get_brightness')
+        try:
+            return(self.home_data[home_id]['modules'][module_id]['brightness'])
+        except:
+            logging.debug('get_brightness no data for {} {}'.format(home_id, module_id))
+
+
+    def get_state(self, home_id, module_id):
+        logging.debug('get_state')
+        try:
+            return(self.home_data[home_id]['modules'][module_id]['on'])
+        except:
+            logging.debug('get_state no data for {} {}'.format(home_id, module_id))
+
 
     def get_module_online(self, home_id, valve_id):
         logging.debug('get_module_online - data{} {} {}'.format(home_id, valve_id, self.home_data) )
@@ -505,22 +520,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         #data_list = ['temperature', 'co2', 'humidity', 'last_seen', 'battery_state', 'ts']
         return(self._get_home_data(module['home_id'], module['module_id'], module['type']))
                
-    '''
-    def get_outdoor_module_data(self, home_id, dev_id=None):
-        logging.debug('get_outdoor_module_data')
-        #data_list = ['temperature', 'co2', 'humidity', 'last_seen', 'battery_state', 'ts']
-        return(self._get_home_data(home_id, dev_id, 'OUTDOOR'))
 
-    def get_rain_module_data(self, home_id, dev_id=None):
-        logging.debug('get_rain_module_data')
-        #data_list = ['rain', 'sum_rain_1', 'sum_rail_24', 'last_seen', 'battery_state', 'ts']
-        return(self._get_home_data(home_id, dev_id, 'RAIN'))
-
-    def get_wind_module_data(self, home_id, dev_id=None):
-        logging.debug('get_wind_module_data')
-        #data_list = ['wind_strength', 'wind_angle', 'wind+gust', 'wind_gust_angle', 'last_seen', 'battery_state', 'ts']
-        return(self._get_home_data(home_id, dev_id, 'WIND'))
-    '''
 
     def get_temperature_C(self, module):
         try:

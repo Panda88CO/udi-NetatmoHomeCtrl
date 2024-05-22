@@ -24,7 +24,7 @@ except ImportError:
 #from nodes.controller import Controller
 #from udi_interface import logging, Custom, Interface
 class udiNetatmoPower(udi_interface.Node):
-    from udiNetatmoLib import bool2ISY, t_mode2ISY, update_ISY_data, node_queue, wait_for_node_done, battery2ISY, con_state2ISY
+    from udiNetatmoLib import bool2ISY, t_mode2ISY, NET_setDriver, update_ISY_data, node_queue, wait_for_node_done, battery2ISY, con_state2ISY
 
     def __init__(self, polyglot, primary, address, name, myNetatmo, home,  module_id):
         super().__init__(polyglot, primary, address, name)
@@ -80,13 +80,22 @@ class udiNetatmoPower(udi_interface.Node):
                 self.node.setDriver('GV1', 99, True, False, 25 )
                 self.node.setDriver('ST', 0)
                 
+    def outlet_control(self, command):
+        logging.debug('outlet_control called {}'.format(command))
+
 
     def update(self, command = None):
         self.myNetatmo.self.myNetatmo.get_home_status(self._home['id'])
-        self.update_ISY_data()        
+        self.update_ISY_data()       
+
+
+    commands = {        
+                'UPDATE': update,
+                'OUTLETCTRL' : outlet_control
+              }         
 
 class udiNetatmoRemote(udi_interface.Node):
-    from udiNetatmoLib import bool2ISY, t_mode2ISY, update_ISY_data, node_queue, wait_for_node_done, battery2ISY, con_state2ISY
+    from udiNetatmoLib import bool2ISY, t_mode2ISY, NET_setDriver, update_ISY_data, node_queue, wait_for_node_done, battery2ISY, con_state2ISY
 
     def __init__(self, polyglot, primary, address, name, myNetatmo, home,  module_id):
         super().__init__(polyglot, primary, address, name)
@@ -147,10 +156,13 @@ class udiNetatmoRemote(udi_interface.Node):
         self.myNetatmo.self.myNetatmo.get_home_status(self._home['id'])
         self.update_ISY_data()
 
+    commands = {        
+                'UPDATE': update,
+              }
 
 
 class udiNetatmoLights(udi_interface.Node):
-    from udiNetatmoLib import bool2ISY, t_mode2ISY, update_ISY_data, node_queue, wait_for_node_done, battery2ISY, con_state2ISY
+    from udiNetatmoLib import bool2ISY, t_mode2ISY, NET_setDriver, update_ISY_data, node_queue, wait_for_node_done, battery2ISY, con_state2ISY
 
     def __init__(self, polyglot, primary, address, name, myNetatmo, home,  module_id):
         super().__init__(polyglot, primary, address, name)
@@ -204,26 +216,29 @@ class udiNetatmoLights(udi_interface.Node):
         if self.node is not None:
             if self.myNetatmo.get_module_online(self.home_id, self.module_id):
                 self.node.setDriver('ST',1)
-                self.node.setDriver('GV0', self.battery2ISY(self.myNetatmo.get_state(self.home_id, self.module_id)))
+                self.node.setDriver('GV0', self.state2ISY(self.myNetatmo.get_state(self.home_id, self.module_id)))
                 self.node.setDriver('GV1', int(-self.myNetatmo.get_brightness(self.home_id, self.module_id)), True, True, 131)
             else:
                 self.node.setDriver('GV0', 99)
                 self.node.setDriver('GV1', 99, True, False, 25 )
                 self.node.setDriver('ST', 0)
                 
+    def light_control(self, command):
+        logging.debug('light_control called {}'.format(command))
+
 
     def update(self, command = None):
         self.myNetatmo.self.myNetatmo.get_home_status(self._home['id'])
         self.update_ISY_data()
 
-
     commands = {        
                 'UPDATE': update,
+                'LIGHTCTRL' : light_control
               }
 
 
 class udiNetatmoValve(udi_interface.Node):
-    from udiNetatmoLib import bool2ISY, t_mode2ISY, update_ISY_data, node_queue, wait_for_node_done, battery2ISY, con_state2ISY
+    from udiNetatmoLib import bool2ISY, t_mode2ISY, NET_setDriver, update_ISY_data, node_queue, wait_for_node_done, battery2ISY, con_state2ISY
 
     def __init__(self, polyglot, primary, address, name, myNetatmo, home,  module_id):
         super().__init__(polyglot, primary, address, name)

@@ -44,6 +44,17 @@ def update_ISY_data(self):
         if nde.address != 'controller':   # but not the setup node
             logging.debug('updating node {} data'.format(nde))
             nde.updateISYdrivers()
+
+def NET_setDriver(self, key, value, Unit=None):
+    logging.debug('EV_setDriver : {} {} {}'.format(key, value, Unit))
+    if value == None:
+        logging.debug('None value passed = seting 99, UOM 25')
+        self.node.setDriver(key, 99, True, True, 25)
+    else:
+        if Unit:
+            self.node.setDriver(key, value, True, True, Unit)
+        else:
+            self.node.setDriver(key, value)
             
 def ISY2op_mode (self, mode_nbr):
     if mode_nbr == 0:

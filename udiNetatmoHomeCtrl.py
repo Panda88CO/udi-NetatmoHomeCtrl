@@ -38,7 +38,7 @@ version = '0.1.8'
 #        ]
 
 class NetatmoController(udi_interface.Node):
-    from udiNetatmoLib import bool2ISY, t_mode2ISY, node_queue, wait_for_node_done, con_state2ISY, convert_temp_unit, heartbeat
+    from udiNetatmoLib import bool2ISY, prepare_node_adr, t_mode2ISY, node_queue, wait_for_node_done, con_state2ISY, convert_temp_unit, heartbeat
 
     def __init__(self, polyglot, primary, address, name):
         super(NetatmoController, self).__init__(polyglot, primary, address, name)
@@ -151,6 +151,7 @@ class NetatmoController(udi_interface.Node):
         selected = False
         #primary_gateway_list = ['NAPlug'] # controller is there for sure 
         primary_node_list = [self.id]
+        module_ids_list = []
         for indx, home  in enumerate(self.home_list):
             logging.debug('Adding rooms  {}'.format(home))
             home_name = self.poly.getValidName(home['name'])
@@ -164,16 +165,14 @@ class NetatmoController(udi_interface.Node):
                             logging.debug('Parsing module IDs {} {}'.format(mod_id, mod_adr ))
                             if self.myNetatmo.isControlDevice(home, mod_adr):#'modules' in home:
                                 device_found = True
+
                                 #for mod_idx, module in enumerate(home['modules']):                                                            
                                 #    if module['id'] == mod_id and module['type'] in self._device_list:
                                 #        device_found = True
                     if device_found:
                         room_name = self.poly.getValidName(room['name'])
                         node_name = home_name+'-'+room_name
-                        room_id = str(room['id'])
-                        room_id = room_id.replace(':','')
-                        room_id = room_id[-10:]
-                        room_node = 'room'+str(room_id)
+                        room_node = 'room'+ self.prepare_node_adr(room['id'], 10)
                         node_address = self.poly.getValidAddress(room_node)
                         logging.debug('adding room node : {} {} {} {} {} {}'.format(node_address, node_address, node_name,  self.myNetatmo, home, room['id']))
                         temp = udiNetatmoHomeCtrlRoom(self.poly, node_address, node_address, node_name,  self.myNetatmo, home, room['id'])
@@ -183,6 +182,8 @@ class NetatmoController(udi_interface.Node):
                             time.sleep(1)
             
         #removing unused nodes
+        # NEed to be updated to check for module addresses
+
         while not self.configDone:
             logging.info('Waiting for config to comlete')
             time.sleep(1)

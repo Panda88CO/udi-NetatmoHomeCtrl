@@ -28,7 +28,7 @@ from udiNetatmoEnergyDevices import udiNetatmoValve, udiNetatmoThermostat
 
 
 class udiNetatmoHomeCtrlRoom(udi_interface.Node):
-    from udiNetatmoLib import bool2ISY, t_mode2ISY, update_ISY_data,  node_queue, wait_for_node_done, con_state2ISY, convert_temp_unit, ISY2sp_mode, ISY2op_mode
+    from udiNetatmoLib import bool2ISY, prepare_node_adr, t_mode2ISY, update_ISY_data,  node_queue, wait_for_node_done, con_state2ISY, convert_temp_unit, ISY2sp_mode, ISY2op_mode
     def __init__(self, polyglot, primary, address, name, myNetatmo, home, room_id):
         super().__init__(polyglot, primary, address, name)
 
@@ -103,9 +103,7 @@ class udiNetatmoHomeCtrlRoom(udi_interface.Node):
                 logging.debug('Device check {} {} {}'.format( self.room_id, dev_info, indx))
                 dev_name = dev_info['name']
                 node_name = self.poly.getValidName(dev_name)
-                dev_id = str(dev_info['id'])
-                dev_id = dev_id.replace(':','')
-                dev_id = dev_id[-14:]
+                dev_id = self.prepare_node_adr(dev_info['id'], 14)
                 node_address = self.poly.getValidAddress(dev_id)
                 logging.debug('addnodes loop - {} {}'.format(node_name, node_address))
                 if dev_info['room_id'] == self.room_id and dev_info['type'] in self.myNetatmo.power_list:

@@ -21,6 +21,11 @@ def wait_for_node_done(self):
         time.sleep(0.1)
     self.n_queue.pop()
 
+def prepare_node_adr(self, dev_adr, length):
+    dev_adr = str(dev_adr)
+    dev_adr = dev_adr.replace(':','')
+    dev_adr = dev_adr[-length:]
+    return(dev_adr)
 
 def heartbeat(self):
     logging.debug('heartbeat: ' + str(self.hb))

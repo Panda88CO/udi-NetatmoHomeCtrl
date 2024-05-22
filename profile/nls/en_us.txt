@@ -40,6 +40,7 @@ ST-npower-GV1-NAME = Inst Power
 ST-npower-Gv2-NAME = Avg Power
 CMD-npower-UPDATE-NAME = Force Update 
 CMD-npower-OUTLETCTRL-NAME = Set State
+CMD-npower-UPDATE-NAME = Force Update 
 
 ND-light-NAME = Light Switch
 ND-light-ICON = Switch
@@ -51,13 +52,14 @@ CMD-nlight-UPDATE-NAME = Force Update
 CMD-nlight-LIGHTCTRL-NAME = Set State
 CMDP-Lstate-NAME = Set state
 CMDP-Lbrightness-NAME = Set brightness
+CMD-nlight-UPDATE-NAME = Force Update 
 
 ND-remote-NAME = Remote
 ND-remote-ICON = GenericCtl
 ST-nremote-ST-NAME = Connected
 ST-nremote-GV0-NAME = Battery Level
 ST-nremote-GV2-NAME = Batter Voltage
-
+CMD-nremote-UPDATE-NAME = Force Update 
 on_off-0 = On
 on_off-1 = Off
 on_off-99 = Unknown

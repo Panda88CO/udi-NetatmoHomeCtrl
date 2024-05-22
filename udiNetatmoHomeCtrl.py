@@ -151,7 +151,7 @@ class NetatmoController(udi_interface.Node):
         selected = False
         #primary_gateway_list = ['NAPlug'] # controller is there for sure 
         primary_node_list = [self.id]
-        module_ids_list = []
+        module_adr_list = []
         for indx, home  in enumerate(self.home_list):
             logging.debug('Adding rooms  {}'.format(home))
             home_name = self.poly.getValidName(home['name'])
@@ -165,7 +165,7 @@ class NetatmoController(udi_interface.Node):
                             logging.debug('Parsing module IDs {} {}'.format(mod_id, mod_adr ))
                             if self.myNetatmo.isControlDevice(home, mod_adr):#'modules' in home:
                                 device_found = True
-
+                                module_adr_list.append(self.prepare_node_adr(mod_adr,14))
                                 #for mod_idx, module in enumerate(home['modules']):                                                            
                                 #    if module['id'] == mod_id and module['type'] in self._device_list:
                                 #        device_found = True
@@ -182,17 +182,18 @@ class NetatmoController(udi_interface.Node):
                             time.sleep(1)
             
         #removing unused nodes
-        # NEed to be updated to check for module addresses
 
         while not self.configDone:
             logging.info('Waiting for config to comlete')
             time.sleep(1)
         #ogging.debug('Checking for nodes not used - node list {} - {} {}'.format(primary_node_list, len(self.nodes_in_db), self.nodes_in_db))
-        for nde in range(0, len(self.nodes_in_db)):
-            node = self.nodes_in_db[nde]
-
+        for nde, node in enumerate(self.nodes_in_db):
+            #node = self.nodes_in_db[nde]
             logging.debug('Scanning db for extra nodes : {}'.format(node))
             if node['primaryNode'] not in primary_node_list:
+                logging.debug('Removing node : {} {}'.format(node['name'], node))
+                self.poly.delNode(node['address'])
+            elif node['address'] not in module_adr_list:
                 logging.debug('Removing node : {} {}'.format(node['name'], node))
                 self.poly.delNode(node['address'])
 

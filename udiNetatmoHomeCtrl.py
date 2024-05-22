@@ -151,7 +151,7 @@ class NetatmoController(udi_interface.Node):
         selected = False
         #primary_gateway_list = ['NAPlug'] # controller is there for sure 
         primary_node_list = [self.id]
-        module_adr_list = []
+        module_adr_list = [self.id]
         for indx, home  in enumerate(self.home_list):
             logging.debug('Adding rooms  {}'.format(home))
             home_name = self.poly.getValidName(home['name'])

@@ -60,7 +60,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         self.home_data = {}
 
 
-        self.dev_list = self.power_list+self.lights_list+self.remotes_list #+self.gateway_list
+        self.dev_list = self.power_list+self.lights_list+self.remotes_list+self.gateway_list
         logging.debug('_dev_list: {}'.format(self.dev_list))
         #self.customParameters= Custom(polyglot, 'customparams')
         #self.Notices = Custom(self.poly, 'notices')

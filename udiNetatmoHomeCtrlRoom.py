@@ -96,15 +96,16 @@ class udiNetatmoHomeCtrlRoom(udi_interface.Node):
         logging.debug('Adding devices to {} {}'.format(self.name, self._home))
 
         if 'modules' in self._home:
-            for indx in range(0, len(self._home['modules'])):
+            for indx, dev_info  in enumerate(self._home['modules']):
                 no_device = False
-                dev_info = self._home['modules'][indx]
+                #dev_info = self._home['modules'][indx]
                 
-                logging.debug('Device check {} {}'.format( self.room_id, dev_info))
+                logging.debug('Device check {} {} {}'.format( self.room_id, dev_info, indx))
                 dev_name = dev_info['name']
                 node_name = self.poly.getValidName(dev_name)
                 dev_id = dev_info['id']
                 node_address = self.poly.getValidAddress(dev_id)
+                logging.debug('addnodes loop - {} {}'.format(node_name, node_address))
                 if dev_info['room_id'] == self.room_id and dev_info['type'] in self.myNetatmo.power_list:
                     logging.debug('adding power node : {} {} {} {} {} {}'.format( self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id))
                     tmp_room = udiNetatmoPower(self.poly, self.primary, node_address, node_name, self.myNetatmo, self._home,  dev_id)

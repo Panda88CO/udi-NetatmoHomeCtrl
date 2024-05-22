@@ -28,7 +28,7 @@
       <accepts>
         <cmd id="UPDATE" />  
         <cmd id="SETPOINT" >
-              <p id="stemp" editor="set_temp" init="CLISPH"/>             
+               <p id="stemp" editor="set_temp" init="CLISPH"/>             
                <p id="spmode" editor="th_mode" init="0" /> 
                <p id="active_t" editor="t_min" init="0" />   
         </cmd>      
@@ -50,10 +50,8 @@
     <cmds>
       <sends />
       <accepts>
-        <cmd id="UPDATE" />  
-
-        </cmd>          
-</accepts>
+        <cmd id="UPDATE" />         
+      </accepts>
     </cmds>
   </nodeDef>
 

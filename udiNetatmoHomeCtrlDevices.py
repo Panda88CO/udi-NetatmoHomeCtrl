@@ -203,12 +203,19 @@ class udiNetatmoGateway(udi_interface.Node):
     def updateEnergy(self):
         pass
 
+
+    def update(self, command):
+        
+        self.myNetatmo.get_home_status(self._home['id'])
+        self.update_ISY_data()
+
     def update(self, command = None):
         self.myNetatmo.get_home_status(self._home['id'])
         self.update_ISY_data()
 
     commands = {        
                 'UPDATE': update,
+                'SCENARIO' : execute_scenario,
               }
 
 

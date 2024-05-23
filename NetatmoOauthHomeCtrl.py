@@ -58,7 +58,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         self.thermostat_list = ['NATherm1']
         self.valves_list = ['NRV']
         self.home_data = {}
-
+        self.home_scenarios = {}
 
         self.dev_list = self.power_list+self.lights_list+self.remotes_list+self.gateway_list
         logging.debug('_dev_list: {}'.format(self.dev_list))
@@ -255,7 +255,12 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         logging.debug('homes_w_ctrl {}'.format(homes_w_ctrl))
         return(homes_w_ctrl)
 
-
+    def get_home_scenarios(self, home_id):
+        logging.debug('get_home_scenarios {} '.format(home_id))
+        api_str = '/getscenarios'
+        temp = self._callApi('GET', api_str )
+        logging.debug('get_home_scenarios result: {} '.format(temp))
+        self.home_scenarios[home_id] = temp
 
     def get_energy_kwh(self, home_id, module_id, interval_min=60):
         logging.debug('get_energy_kwh {} {} {}'.format(home_id, module_id, interval_min))
@@ -278,8 +283,50 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
                     return(mod_info['type'] in self.dev_list)
         else:
             return(False)
+            
+    def set_brightness(self, home_id, module_id, brightness_pct ):
+        logging.debug('set_brightness {} {} {}'.format(home_id, module_id, brightness_pct))
+        gateway_id = self.home_data[home_id]['modules'][module_id]['bridge']
+        api_str = '/setstate'
+        data = {}
+        data['home'] = {}
+        data['home']['id'] = str(home_id)
+        data['home']['modules'] = str(module_id)       
+        data['home']['bridge'] = str(gateway_id)   
+        if brightness_pct >= 0 and brightness_pct <= 100:
+            data['home']['brightness'] = int(brightness_pct)
+        temp = self._callApi('POST', api_str, data )
+        logging.debug('set_brightness result: {} '.format(temp))
 
-    
+
+    def set_state(self,  home_id, module_id, state):
+        logging.debug('set_state {} {} {}'.format(home_id, module_id, state))
+        gateway_id = self.home_data[home_id]['modules'][module_id]['bridge']
+        api_str = '/setstate'
+        data = {}
+        data['home'] = {}
+        data['home']['id'] = str(home_id)
+        data['home']['modules'] = str(module_id)       
+        data['home']['bridge'] = str(gateway_id)   
+        data['home']['on'] = state.lower() == 'on' or state == True
+        temp = self._callApi('POST', api_str, data )
+        logging.debug('set_state result: {} '.format(temp))
+
+
+    def launch_secnario(self,  home_id, module_id, scenario):            
+        logging.debug('launch_secnario {} {} {}'.format(home_id, module_id, scenario))
+        api_str = '/setstate'
+        data = {}
+        data['home'] = {}
+        data['home']['id'] = str(home_id)
+        data['home']['modules'] = str(module_id)
+        if scenario in self.home_scenarios[home_id]:
+            data['home']['scenario'] = str(scenario)
+            temp = self._callApi('POST', api_str, data )
+            logging.debug('set_state result: {} '.format(temp))         
+        else:
+            logging.error('Unknown scenario passed: {}'.format(scenario))
+
 
     def module_type (self, type):
         if type in self.gateway_list:

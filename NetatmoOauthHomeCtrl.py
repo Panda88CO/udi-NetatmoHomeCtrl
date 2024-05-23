@@ -257,6 +257,17 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
 
 
 
+    def get_energy_kwh(self, home_id, module_id, interval_min=30):
+        logging.debug('get_energy_kwh {} {} {}'.format(home_id, module_id, interval_min))
+        time_now = int(time.time())
+        time_start = time_now - 2*interval_min*60
+        gatway_id = self.home_data[home_id]['modules'][module_id]['bridge']
+        gateway_id_str = urllib.parse.quote_plus(gatway_id)
+        module_id_str = urllib.parse.quote_plus(module_id)
+        api_str = '/getmeasure?device_id='+gateway_id_str+'&module_id='+module_id_str+'&type=sum_energy_elec&scale=30min&date_begin='+str(time_start)+'&date_end='+str(time_now)
+        temp = self._callApi('GET', api_str )
+        logging.debug('get_energy_kwh result: {} '.format(temp))
+
     def isControlDevice(self, home, module_address):
         logging.debug('isControlDevice {} - {}'.format(module_address, home ))
         if 'modules' in home:
@@ -365,6 +376,13 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         except:
             logging.debug('get_state no data for {} {}'.format(home_id, module_id))
 
+    def get_power_used(self, home_id, module_id):
+        logging.debug('get_power_used')
+        try:
+            return(self.home_data[home_id]['modules'][module_id]['power'])
+        except:
+            return(None)
+
 
     def get_module_online(self, home_id, module_id):
         logging.debug('get_module_online - data {} {} {}'.format(home_id, module_id, self.home_data) )
@@ -400,6 +418,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
             return( self.home_data[home_id]['modules'][module_id]['wifi_strength'])
         else:
             return(None) 
+
 
     def get_home_status(self, home):
         status = {}

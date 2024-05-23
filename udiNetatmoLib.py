@@ -78,6 +78,13 @@ def ISY2sp_mode (self, mode_nbr):
         mode_str = 'unknown'+str(mode_nbr)
     return(mode_str)
 
+def on_state2ISY(self, state):
+    if state == None:
+        return(99)
+    elif state:
+        return(1)
+    else:
+        return(0)
 
 
 def rfstate2ISY(self, rf_state):

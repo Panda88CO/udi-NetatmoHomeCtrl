@@ -239,6 +239,8 @@ class NetatmoController(udi_interface.Node):
             logging.error('eISY/Polisy aopears offline')
             self.node.setDriver('ST', 0, True, True)
 
+    def updateEnergy(self):
+        pass
 
     def systemPoll (self, polltype):
         #if self.nodeDefineDone:

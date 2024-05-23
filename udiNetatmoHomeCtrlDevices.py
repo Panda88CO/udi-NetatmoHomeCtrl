@@ -24,7 +24,7 @@ except ImportError:
 #from nodes.controller import Controller
 #from udi_interface import logging, Custom, Interface
 class udiNetatmoPower(udi_interface.Node):
-    from udiNetatmoLib import bool2ISY, t_mode2ISY, NET_setDriver, update_ISY_data, node_queue, wait_for_node_done, battery2ISY, con_state2ISY
+    from udiNetatmoLib import bool2ISY, t_mode2ISY, NET_setDriver, on_state2ISY, update_ISY_data, node_queue, wait_for_node_done, battery2ISY, con_state2ISY
 
     def __init__(self, polyglot, primary, address, name, myNetatmo, home,  module_id):
         super().__init__(polyglot, primary, address, name)
@@ -63,6 +63,10 @@ class udiNetatmoPower(udi_interface.Node):
     def start(self):
         logging.debug('Executing udiNetatmoPower start')
         self.updateISYdrivers()     
+        self.updateEnergy()
+
+    def updateEnergy(self):
+        self.myNetatmo.get_energy_kwh(self.home_id, self.module_id)
 
     def updateISYdrivers(self):
         logging.debug('updateISYdrivers')
@@ -71,15 +75,9 @@ class udiNetatmoPower(udi_interface.Node):
         logging.debug('Power module data:')
         if self.node is not None:
             if self.myNetatmo.get_module_online(self.home_id, self.module_id):
-                self.node.setDriver('ST',1)
-                #self.node.setDriver('GV2', round(self.myNetatmo.get_valve_bat_level(self.home_id, self.module_id)/1000, 2), True, True, 72)
-                #self.node.setDriver('GV0', self.battery2ISY(self.myNetatmo.get_valve_bat_state(self.home_id, self.module_id)))
-                #self.node.setDriver('GV1', int(-self.myNetatmo.get_valve_rf_strength(self.home_id, self.module_id)), True, True, 131)
-            else:
-                self.node.setDriver('GV2', 99, True, False, 25 )
-                self.node.setDriver('GV0', 99)
-                self.node.setDriver('GV1', 99, True, False, 25 )
-                self.node.setDriver('ST', 0)
+                self.NET_setDriver('ST',1)
+                self.NET_setDriver('GV0', self.on_state2ISY(self.myNetatmo.get_state(self.home_id, self.module_id)))
+                self.NET_setDriver('GV1', int(-self.myNetatmo.get_power_used(self.home_id, self.module_id)),  51)
                 
     def outlet_control(self, command):
         logging.debug('outlet_control called {}'.format(command))
@@ -148,6 +146,8 @@ class udiNetatmoRemote(udi_interface.Node):
                 self.NET_setDriver('GV2', round(self.myNetatmo.get_valve_bat_level(self.home_id, self.module_id)/1000, 2), 72)
                 self.NET_setDriver('GV0', self.battery2ISY(self.myNetatmo.get_valve_bat_state(self.home_id, self.module_id)))
 
+    def updateEnergy(self):
+        pass
 
 class udiNetatmoGateway(udi_interface.Node):
     from udiNetatmoLib import bool2ISY, t_mode2ISY, NET_setDriver, update_ISY_data, node_queue, wait_for_node_done, battery2ISY, con_state2ISY
@@ -198,9 +198,10 @@ class udiNetatmoGateway(udi_interface.Node):
         if self.node is not None:
             if self.myNetatmo.get_module_online(self.home_id, self.module_id):
                 self.NET_setDriver('ST',1)
-                self.NET_setDriver('GV10', self.battery2ISY(self.myNetatmo.get_wifi_strength(self.home_id, self.module_id)))
+                self.NET_setDriver('GV10', self.myNetatmo.get_wifi_strength(self.home_id, self.module_id))
 
-
+    def updateEnergy(self):
+        pass
 
     def update(self, command = None):
         self.myNetatmo.get_home_status(self._home['id'])
@@ -212,7 +213,7 @@ class udiNetatmoGateway(udi_interface.Node):
 
 
 class udiNetatmoLights(udi_interface.Node):
-    from udiNetatmoLib import bool2ISY, t_mode2ISY, NET_setDriver, update_ISY_data, node_queue, wait_for_node_done, battery2ISY, con_state2ISY
+    from udiNetatmoLib import bool2ISY, t_mode2ISY, NET_setDriver, on_state2ISY, update_ISY_data, node_queue, wait_for_node_done, battery2ISY, con_state2ISY
 
     def __init__(self, polyglot, primary, address, name, myNetatmo, home,  module_id):
         super().__init__(polyglot, primary, address, name)
@@ -255,8 +256,11 @@ class udiNetatmoLights(udi_interface.Node):
     def start(self):
         logging.debug('Executing udiNetatmoLights start')
         self.updateISYdrivers()        
+        self.updateEnergy()
 
-
+        
+    def updateEnergy(self):
+        self.myNetatmo.get_energy_kwh(self.home_id, self.module_id)
    
         
     def updateISYdrivers(self):
@@ -267,8 +271,8 @@ class udiNetatmoLights(udi_interface.Node):
         if self.node is not None:
             if self.myNetatmo.get_module_online(self.home_id, self.module_id):
                 self.NET_setDriver('ST',1)
-                self.NET_setDriver('GV0', self.state2ISY(self.myNetatmo.get_state(self.home_id, self.module_id)))
-                self.NET_setDriver('GV1', int(-self.myNetatmo.get_brightness(self.home_id, self.module_id)),  51)
+                self.NET_setDriver('GV0', self.os_state2ISY(self.myNetatmo.get_state(self.home_id, self.module_id)))
+                self.NET_setDriver('GV1', int(self.myNetatmo.get_brightness(self.home_id, self.module_id)),  51)
                 
     def light_control(self, command):
         logging.debug('light_control called {}'.format(command))

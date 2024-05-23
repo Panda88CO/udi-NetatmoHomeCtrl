@@ -82,7 +82,7 @@
       <accepts> 
         <cmd id="UPDATE" />   
         <cmd id="OUTLETCTRL" >
-                <p id="" editor="on_off" init="GV0"/> 
+                <p id="" editor="set_on_off" init="GV0"/> 
         </cmd>                  
       </accepts>
     </cmds>
@@ -99,8 +99,8 @@
       <accepts> 
         <cmd id="UPDATE" />
         <cmd id="LIGHTCTRL" >
-                <p id="Lstate" editor="on_off" init="GV0"/> 
-                <p id="Lbrightness" editor="brightness" init="GV1" />   
+                <p id="Lstate" editor="set_on_off" init="GV0"/> 
+                <p id="Lbrightness" editor="set_brightness" init="GV1" />   
         </cmd>                
       </accepts>
     </cmds>

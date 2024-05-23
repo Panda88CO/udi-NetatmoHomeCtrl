@@ -64,7 +64,7 @@
         <range uom="131"  min="-100" max="174"/>
         <range uom="25" subset="0,99" nls="error" />
     </editor>
-    
+
     <editor id="rf_strength">
         <range uom="131"  min="-100" max="174"/>
         <range uom="25" subset="0,99" nls="error" />
@@ -74,11 +74,18 @@
         <range uom="25" subset="0-1,99" nls="on_off" />
     </editor>
 
+    <editor id="set_on_off">
+        <range uom="25" subset="0-1" nls="on_off" />
+    </editor>
+
     <editor id="brightness">
         <range uom="51" min="0" max="100" prec="0" />
         <range uom="25" subset="0,99" nls="error" />
     </editor>
-
+    <editor id="set_brightness">
+        <range uom="51" min="0" max="100" prec="0" />
+    </editor>
+    
     <editor id="power">
         <range uom="33" min="0" max="100" prec="2" />
         <range uom="25" subset="0,99" nls="error" />

@@ -161,7 +161,8 @@ class udiNetatmoHomeCtrlRoom(udi_interface.Node):
             self.node.setDriver('ST', 1)
             self.NET_setDriver('GV3', int(self.myNetatmo.get_time_since_last_update_sec(self.home_id)/60), 44)
 
-
+    def updateEnergy(self):
+        pass
 
 
     def set_setpoint(self, command):
@@ -363,7 +364,8 @@ class udiNetatmoEnergyRoom(udi_interface.Node):
             self.NET_setDriver('GV2', self.bool2ISY(self.myNetatmo.get_room_anticipating(self.home_id, self.room_id)))
             self.NET_setDriver('GV3', int(self.myNetatmo.get_time_since_last_update_sec(self.home_id)/60), 44)
 
-
+    def updateEnergy(self):
+        pass
 
     def set_setpoint(self, command):
         #{'address': 'room3956476596', 'cmd': 'SETPOINT', 'query': {'stemp.uom17': '44.6', 'mode.uom25': '0', 'active_t.uom44': '0'}}

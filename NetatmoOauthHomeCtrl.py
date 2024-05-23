@@ -257,10 +257,10 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
 
 
 
-    def get_energy_kwh(self, home_id, module_id, interval_min=30):
+    def get_energy_kwh(self, home_id, module_id, interval_min=60):
         logging.debug('get_energy_kwh {} {} {}'.format(home_id, module_id, interval_min))
         time_now = int(time.time())
-        time_start = time_now - 2*interval_min*60
+        time_start = time_now - 24*interval_min*60
         gatway_id = self.home_data[home_id]['modules'][module_id]['bridge']
         gateway_id_str = urllib.parse.quote_plus(gatway_id)
         module_id_str = urllib.parse.quote_plus(module_id)

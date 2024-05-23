@@ -16,7 +16,7 @@ except ImportError:
     import logging
     logging.basicConfig(level=logging.INFO)
 
-testMessages = ['Mes1', 'Mess2','Messa3','Messag4','Message 5', 'mes77']
+#testMessages = ['Mes1', 'Mess2','Messa3','Messag4','Message 5', 'mes77']
 
 
 
@@ -81,4 +81,4 @@ def udiProfileUpdate(messages):
         logging.error('./profile/nls/en_us.txt NOT FOUND ')
     return(foundChanges)
 
-udiTssProfileUpdate(testMessages)
+#udiProfileUpdate(testMessages)

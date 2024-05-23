@@ -255,7 +255,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         logging.debug('homes_w_ctrl {}'.format(homes_w_ctrl))
         return(homes_w_ctrl)
 
-    def get_home_scenarios(self, home_id):
+    def get_homes_scenarios(self, home_id):
         logging.debug('get_home_scenarios {} '.format(home_id))
         api_str = '/getscenarios'
         temp = self._callApi('GET', api_str )
@@ -308,8 +308,11 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         data['home'] = {}
         data['home']['id'] = str(home_id)
         data['home']['modules'] = str(module_id)       
-        data['home']['bridge'] = str(gateway_id)   
-        data['home']['on'] = state.lower() == 'on' or state == True
+        data['home']['bridge'] = str(gateway_id)
+        if isinstance(state) == str:
+            data['home']['on'] = state.lower() == 'on'
+        if isinstance(state) == bool:
+            data['home']['on'] = state
         temp = self._callApi('POST', api_str, data )
         logging.debug('set_state result: {} '.format(temp))
         return(temp)

@@ -141,6 +141,8 @@ class NetatmoController(udi_interface.Node):
         #update data
         for home_id in self.home_list:
             self.myNetatmo.get_home_status(home_id)
+            scenario_list = self.myNetatmo.get_homes_scenarios(self.myNetatmo.homes_list[home_id])
+            #self.udiProfileUpdate(scenario_list)
         self.addNodes()
         self.wait_for_node_done()
 
@@ -257,8 +259,8 @@ class NetatmoController(udi_interface.Node):
                     self.myNetatmo.get_homes_info()
                     for home_id in self.myNetatmo.homes_list:
                         self.myNetatmo.get_home_status(self.myNetatmo.homes_list[home_id])
-                        scenario_list = self.myNetatmo.get_home_scenarios(self.myNetatmo.homes_list[home_id])
-                        #self.udiProfileUpdate(scenario_list)
+
+
                         #self.myNetatmo.update_weather_info_instant(home)
                     #nodes = self.poly.getNodes()
                     for nde in nodes:

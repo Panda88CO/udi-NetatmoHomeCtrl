@@ -79,7 +79,7 @@
     </editor>
 
     <editor id="home_scenario">
-        <range uom="25" subset="0-3" nls="home_scenario" />
+        <range uom="25" subset="0-7" nls="home_scenario" />
     </editor>
 
 

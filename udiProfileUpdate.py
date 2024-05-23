@@ -20,7 +20,7 @@ except ImportError:
 
 
 
-def udiProfileUpdate(messages):
+def udiProfileUpdate(self, messages):
     '''
         if (os.path.exists('./profile/editor/editor.xml')):
             #logging.debug('reading /devices.json')

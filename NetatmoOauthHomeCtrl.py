@@ -259,10 +259,15 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         logging.debug('get_home_scenarios {} '.format(home_id))
         home_id_str = urllib.parse.quote_plus(home_id)
         api_str = '/getscenarios?home_id='+str(home_id_str)
-        temp = self._callApi('GET', api_str )
-        logging.debug('get_home_scenarios result: {} '.format(temp))
-        self.home_scenarios[home_id] = temp
-        return(self.home_scenarios[home_id])
+        res = self._callApi('GET', api_str )
+        logging.debug('get_home_scenarios result: {} '.format(res))
+        scenario_list = []
+        if res['status'] == 'ok':
+            self.home_scenarios[home_id] = res['body']['scenarios']
+            scenario_list = []
+            for indx, scn in enumerate(self.home_scenarios[home_id]):
+                scenario_list.append(scn['type'])
+        return(scenario_list)
 
     def get_energy_kwh(self, home_id, module_id, interval_min=60):
         logging.debug('get_energy_kwh {} {} {}'.format(home_id, module_id, interval_min))

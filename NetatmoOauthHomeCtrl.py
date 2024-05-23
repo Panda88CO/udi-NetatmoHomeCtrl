@@ -293,10 +293,11 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         data = {}
         data['home'] = {}
         data['home']['id'] = str(home_id)
-        data['home']['modules'] = str(module_id)       
-        data['home']['bridge'] = str(gateway_id)   
+        data['home']['modules'] = [] 
+        data['home']['modules'].append({'id':str(module_id)})       
+        data['home']['modules'].append({'bridge':str(gateway_id)}))   
         if brightness_pct >= 0 and brightness_pct <= 100:
-            data['home']['brightness'] = int(brightness_pct)
+            data['home']['modules'].append({'brightness':int(brightness_pct)})
         temp = self._callApi('POST', api_str, data )
         logging.debug('set_brightness result: {} '.format(temp))
         return(temp)
@@ -308,12 +309,13 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         data = {}
         data['home'] = {}
         data['home']['id'] = str(home_id)
-        data['home']['modules'] = str(module_id)       
-        data['home']['bridge'] = str(gateway_id)
+        data['home']['modules'] = [] 
+        data['home']['modules'].append({'id':str(module_id)})       
+        data['home']['modules'].append({'bridge':str(gateway_id)})
         if isinstance(state, str):
-            data['home']['on'] = state.lower() == 'on'
+            data['home']['modules'].append({'on': state.lower() == 'on'})
         if isinstance(state, bool):
-            data['home']['on'] = state
+            data['home']['modules'].append({'on': state})
         temp = self._callApi('POST', api_str, data )
         logging.debug('set_state result: {} '.format(temp))
         return(temp)
@@ -325,9 +327,11 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         data = {}
         data['home'] = {}
         data['home']['id'] = str(home_id)
-        data['home']['modules'] = str(module_id)
+        data['home']['modules'] = [] 
+        data['home']['modules'].append({'id':str(module_id)})    
+
         if scenario in self.home_scenarios[home_id]:
-            data['home']['scenario'] = str(scenario)
+            data['home']['modules'].append({'scenario': str(scenario)})
             temp = self._callApi('POST', api_str, data )
             logging.debug('launch_scenario result: {} '.format(temp)) 
             return(temp)        

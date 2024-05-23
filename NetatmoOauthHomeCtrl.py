@@ -297,7 +297,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
             data['home']['brightness'] = int(brightness_pct)
         temp = self._callApi('POST', api_str, data )
         logging.debug('set_brightness result: {} '.format(temp))
-
+        return(temp)
 
     def set_state(self,  home_id, module_id, state):
         logging.debug('set_state {} {} {}'.format(home_id, module_id, state))
@@ -311,10 +311,11 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         data['home']['on'] = state.lower() == 'on' or state == True
         temp = self._callApi('POST', api_str, data )
         logging.debug('set_state result: {} '.format(temp))
+        return(temp)
 
 
-    def launch_secnario(self,  home_id, module_id, scenario):            
-        logging.debug('launch_secnario {} {} {}'.format(home_id, module_id, scenario))
+    def launch_scenario(self,  home_id, module_id, scenario):            
+        logging.debug('launch_scenario {} {} {}'.format(home_id, module_id, scenario))
         api_str = '/setstate'
         data = {}
         data['home'] = {}
@@ -323,10 +324,11 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         if scenario in self.home_scenarios[home_id]:
             data['home']['scenario'] = str(scenario)
             temp = self._callApi('POST', api_str, data )
-            logging.debug('set_state result: {} '.format(temp))         
+            logging.debug('launch_scenario result: {} '.format(temp)) 
+            return(temp)        
         else:
             logging.error('Unknown scenario passed: {}'.format(scenario))
-
+            return(None)
 
     def module_type (self, type):
         if type in self.gateway_list:

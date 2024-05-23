@@ -100,8 +100,11 @@
         <cmd id="UPDATE" />
         <cmd id="LIGHTCTRL" >
                 <p id="Lstate" editor="set_on_off" init="GV0"/> 
+        </cmd>            
+        <cmd id="BRIGHTCTRL" >
                 <p id="Lbrightness" editor="set_brightness" init="GV1" />   
-        </cmd>                
+        </cmd>                 
+
       </accepts>
     </cmds>
   </nodeDef>
@@ -128,7 +131,10 @@
     <cmds>
       <sends />
       <accepts> 
-        <cmd id="UPDATE" />        
+        <cmd id="UPDATE" />      
+        <cmd id="SCENARIO" >
+                <p id="" editor="home_scenario" init="" />   
+        </cmd>              
       </accepts>
     </cmds>
   </nodeDef>

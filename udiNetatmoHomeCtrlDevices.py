@@ -81,7 +81,12 @@ class udiNetatmoPower(udi_interface.Node):
                 
     def outlet_control(self, command):
         logging.debug('outlet_control called {}'.format(command))
-
+        on_off = int(command.get('value'))
+        logging.debug('Command data : {}'.format(on_off == 1))
+        if self.myNetatmo.set_state(self.home_id, self.module_id, on_off == 1):
+            self.NET_setDriver('GV0',on_off == 1)
+        else:
+            self.NET_setDriver('GV0', 99)
 
     def update(self, command = None):
         self.myNetatmo.get_home_status(self._home['id'])
@@ -204,9 +209,13 @@ class udiNetatmoGateway(udi_interface.Node):
         pass
 
 
-    def update(self, command):
-        
-        self.myNetatmo.get_home_status(self._home['id'])
+    def execute_scenario(self, command):
+        #cmd = command#query = command.get("query")
+        #unit = command.get('uom')
+        indx = str(command.get('value'))
+        if len(self.myNetatmo.home_scenarios[self.home_id]) >= indx:
+            scenario = self.myNetatmo.home_scenarios[self.home_id][indx]
+            self.myNetatmo.launch_scenario(self.home_id, self.module_id, scenario)
         self.update_ISY_data()
 
     def update(self, command = None):
@@ -278,9 +287,24 @@ class udiNetatmoLights(udi_interface.Node):
                 self.NET_setDriver('GV0', self.os_state2ISY(self.myNetatmo.get_state(self.home_id, self.module_id)))
                 self.NET_setDriver('GV1', int(self.myNetatmo.get_brightness(self.home_id, self.module_id)),  51)
                 
+    def brightness_control(self, command):
+        logging.debug('brightness_control called {}'.format(command))
+
+        brightness = int(command.get('value'))
+        logging.debug('Command data : {}'.format(brightness))
+        if self.myNetatmo.set_brightness(self.home_id, self.module_id, brightness):
+            self.NET_setDriver('GV1', brightness)
+        else:
+            self.NET_setDriver('GV1', 99)
+
     def light_control(self, command):
         logging.debug('light_control called {}'.format(command))
-
+        on_off = int(command.get('value'))
+        logging.debug('Command data : {}'.format(on_off == 1))
+        if self.myNetatmo.set_state(self.home_id, self.module_id, on_off == 1):
+            self.NET_setDriver('GV0',on_off == 1)
+        else:
+            self.NET_setDriver('GV0', 99)
 
     def update(self, command = None):
         self.myNetatmo.get_home_status(self._home['id'])
@@ -288,7 +312,8 @@ class udiNetatmoLights(udi_interface.Node):
 
     commands = {        
                 'UPDATE': update,
-                'LIGHTCTRL' : light_control
+                'BRIGHTCTRL' : brightness_control,
+                'LIGHTCTRL' : light_control,
               }
 
 '''

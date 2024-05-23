@@ -30,6 +30,7 @@ ND-gateway-ICON = GenericCtl
 ST-ngateway-ST-NAME = State
 ST-ngateway-GV10-NAME = Wi-Fi strength
 CMD-ngateway-UPDATE-NAME = Force Update 
+CMD-ngateway-SCENARIO-NAME = Execute Scenario
 
 ND-valve-NAME = Valve
 ND-valve-ICON = Thermostat
@@ -57,8 +58,7 @@ ST-nlight-GV1-NAME = Brightness
 
 CMD-nlight-UPDATE-NAME = Force Update 
 CMD-nlight-LIGHTCTRL-NAME = Set State
-CMDP-Lstate-NAME = Set state
-CMDP-Lbrightness-NAME = Set brightness
+CMD-nlight-LIGHTCTRL-NAME = Set Brightness
 CMD-nlight-UPDATE-NAME = Force Update 
 
 ND-remote-NAME = Remote
@@ -97,3 +97,8 @@ battery-3 = Medium
 battery-4 = Low
 battery-5 = Very Low
 battery-99 = Unknown
+
+home_scenario-0 = Home
+home_scenario-1 = Away   
+home_scenario-2 = Home
+home_scenario-3 = Away  

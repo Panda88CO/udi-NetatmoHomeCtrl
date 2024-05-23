@@ -78,6 +78,11 @@
         <range uom="25" subset="0-1" nls="on_off" />
     </editor>
 
+    <editor id="home_scenario">
+        <range uom="25" subset="0-3" nls="home_scenario" />
+    </editor>
+
+
     <editor id="brightness">
         <range uom="51" min="0" max="100" prec="0" />
         <range uom="25" subset="0,99" nls="error" />

@@ -249,16 +249,13 @@ class udiNetatmoLights(udi_interface.Node):
         self.nodeDefineDone = True
         self.node_ready = True
 
-    
-    
-
 
     def start(self):
         logging.debug('Executing udiNetatmoLights start')
         self.updateISYdrivers()        
         self.updateEnergy()
 
-        
+
     def updateEnergy(self):
         self.myNetatmo.get_energy_kwh(self.home_id, self.module_id)
    

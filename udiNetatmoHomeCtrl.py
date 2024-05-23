@@ -263,7 +263,7 @@ class NetatmoController(udi_interface.Node):
                         if nde.address != 'controller':   # but not the setup node
                             logging.debug('updating node {} data'.format(nde))
                             nde.updateISYdrivers()
-                            #nde.updateEnergy()
+                            nde.updateEnergy()
                                                 
                 if 'shortPoll' in polltype:
                     self.heartbeat()

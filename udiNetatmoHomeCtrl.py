@@ -139,9 +139,9 @@ class NetatmoController(udi_interface.Node):
             logging.info('Waiting for configuration to complete')
             time.sleep(1)
         #update data
-        for home_id in self.home_list:
-            self.myNetatmo.get_home_status(home_id)
-            scenario_list = self.myNetatmo.get_homes_scenarios(home_id)
+        for home in self.home_list:
+            self.myNetatmo.get_home_status(home)
+            scenario_list = self.myNetatmo.get_homes_scenarios(home['id'])
             #self.udiProfileUpdate(scenario_list)
         self.addNodes()
         self.wait_for_node_done()

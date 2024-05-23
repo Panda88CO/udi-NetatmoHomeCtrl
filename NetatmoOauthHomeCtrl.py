@@ -310,9 +310,9 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         data['home']['id'] = str(home_id)
         data['home']['modules'] = str(module_id)       
         data['home']['bridge'] = str(gateway_id)
-        if isinstance(state) == str:
+        if isinstance(state, str):
             data['home']['on'] = state.lower() == 'on'
-        if isinstance(state) == bool:
+        if isinstance(state, bool):
             data['home']['on'] = state
         temp = self._callApi('POST', api_str, data )
         logging.debug('set_state result: {} '.format(temp))

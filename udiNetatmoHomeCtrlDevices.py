@@ -77,7 +77,7 @@ class udiNetatmoPower(udi_interface.Node):
             if self.myNetatmo.get_module_online(self.home_id, self.module_id):
                 self.NET_setDriver('ST',1)
                 self.NET_setDriver('GV0', self.on_state2ISY(self.myNetatmo.get_state(self.home_id, self.module_id)))
-                self.NET_setDriver('GV1', int(-self.myNetatmo.get_power_used(self.home_id, self.module_id)),  51)
+                self.NET_setDriver('GV1', int(-self.myNetatmo.get_power_used(self.home_id, self.module_id)),  33)
                 
     def outlet_control(self, command):
         logging.debug('outlet_control called {}'.format(command))

@@ -261,6 +261,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         temp = self._callApi('GET', api_str )
         logging.debug('get_home_scenarios result: {} '.format(temp))
         self.home_scenarios[home_id] = temp
+        return(self.home_scenarios[home_id])
 
     def get_energy_kwh(self, home_id, module_id, interval_min=60):
         logging.debug('get_energy_kwh {} {} {}'.format(home_id, module_id, interval_min))

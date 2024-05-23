@@ -39,7 +39,7 @@ version = '0.1.8'
 
 class NetatmoController(udi_interface.Node):
     from udiNetatmoLib import bool2ISY, prepare_node_adr, NET_setDriver, t_mode2ISY, node_queue, wait_for_node_done, con_state2ISY, convert_temp_unit, heartbeat
-
+    from udiProfileUpdate import udiProfileUpdate
     def __init__(self, polyglot, primary, address, name):
         super(NetatmoController, self).__init__(polyglot, primary, address, name)
         logging.debug('NetatmoController Initializing')
@@ -257,7 +257,8 @@ class NetatmoController(udi_interface.Node):
                     self.myNetatmo.get_homes_info()
                     for home_id in self.myNetatmo.homes_list:
                         self.myNetatmo.get_home_status(self.myNetatmo.homes_list[home_id])
-                        self.myNetatmo.get_home_scenarios(self.myNetatmo.homes_list[home_id])
+                        scenario_list = self.myNetatmo.get_home_scenarios(self.myNetatmo.homes_list[home_id])
+                        #self.udiProfileUpdate(scenario_list)
                         #self.myNetatmo.update_weather_info_instant(home)
                     #nodes = self.poly.getNodes()
                     for nde in nodes:

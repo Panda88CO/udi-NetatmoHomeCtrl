@@ -142,14 +142,16 @@ class NetatmoController(udi_interface.Node):
         for home in self.home_list:
             self.myNetatmo.get_home_status(home)
             scenario_list = self.myNetatmo.get_homes_scenarios(home['id'])
+            logging.debug('scenario List: {}'.format(scenario_list))
             if len(scenario_list) > 0:
                 self.udiProfileUpdate(scenario_list)
+
         self.addNodes()
         self.wait_for_node_done()
+        self.poly.updateProfile()
 
 
-    def addNodes(self):
-        
+    def addNodes(self):        
         logging.info('Adding rooms of selected homes')
         selected = False
         #primary_gateway_list = ['NAPlug'] # controller is there for sure 

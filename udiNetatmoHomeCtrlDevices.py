@@ -84,7 +84,7 @@ class udiNetatmoPower(udi_interface.Node):
         on_off = int(command.get('value'))
         logging.debug('Command data : {}'.format(on_off == 1))
         if self.myNetatmo.set_state(self.home_id, self.module_id, on_off == 1):
-            self.NET_setDriver('GV0',on_off == 1)
+            self.NET_setDriver('GV0',on_off)
         else:
             self.NET_setDriver('GV0', 99)
 

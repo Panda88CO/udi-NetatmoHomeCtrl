@@ -67,8 +67,8 @@ ST-nremote-ST-NAME = Connected
 ST-nremote-GV0-NAME = Battery Level
 ST-nremote-GV2-NAME = Batter Voltage
 CMD-nremote-UPDATE-NAME = Force Update 
-on_off-0 = On
-on_off-1 = Off
+on_off-0 = Off
+on_off-1 = On
 on_off-99 = Unknown
 
 

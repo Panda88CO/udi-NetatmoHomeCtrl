@@ -295,7 +295,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         data['home']['id'] = str(home_id)
         data['home']['modules'] = [] 
         data['home']['modules'].append({'id':str(module_id)})       
-        data['home']['modules'].append({'bridge':str(gateway_id)}))   
+        data['home']['modules'].append({'bridge':str(gateway_id)})  
         if brightness_pct >= 0 and brightness_pct <= 100:
             data['home']['modules'].append({'brightness':int(brightness_pct)})
         temp = self._callApi('POST', api_str, data )

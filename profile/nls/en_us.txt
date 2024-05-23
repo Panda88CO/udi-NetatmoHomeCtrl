@@ -100,5 +100,5 @@ battery-99 = Unknown
 
 home_scenario-0 = Home
 home_scenario-1 = Away   
-home_scenario-2 = Home
-home_scenario-3 = Away  
+home_scenario-2 = Wake Up
+home_scenario-3 = Sleep  

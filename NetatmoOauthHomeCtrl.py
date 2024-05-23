@@ -257,7 +257,8 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
 
     def get_homes_scenarios(self, home_id):
         logging.debug('get_home_scenarios {} '.format(home_id))
-        api_str = '/getscenarios'
+        home_id_str = urllib.parse.quote_plus(home_id)
+        api_str = 'getscenarios?home_id='+str(home_id_str)
         temp = self._callApi('GET', api_str )
         logging.debug('get_home_scenarios result: {} '.format(temp))
         self.home_scenarios[home_id] = temp

@@ -154,6 +154,15 @@ class udiNetatmoRemote(udi_interface.Node):
     def updateEnergy(self):
         pass
 
+    def update(self, command = None):
+        self.myNetatmo.get_home_status(self._home['id'])
+        self.update_ISY_data()
+
+    commands = {        
+                'UPDATE': update,
+              }
+
+
 class udiNetatmoGateway(udi_interface.Node):
     from udiNetatmoLib import bool2ISY, t_mode2ISY, NET_setDriver, update_ISY_data, node_queue, wait_for_node_done, battery2ISY, con_state2ISY
 

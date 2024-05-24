@@ -532,8 +532,10 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
                         self.home_data[home_id] = status
                         logging.debug('status2: {}'.format(status))
                         '''                
-                    logging.debug('home_data : {} {}'.format(home_id, self.home_data ))
-                    return(self.home_data[home_id])
+                        logging.debug('home_data : {} {}'.format(home_id, self.home_data ))
+                        return(self.home_data[home_id])
+                    else:
+                        return(None)
                 else:
                     return(None)
         except Exception as e:

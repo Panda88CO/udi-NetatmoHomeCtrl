@@ -263,7 +263,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         logging.debug('get_home_scenarios result: {} '.format(res))
         scenario_list = []
         if res['status'] == 'ok':
-            self.home_scenarios[home_id] = res['body']['scenarios']
+            self.home_scenarios[home_id] = res['body']['home']['scenarios']
             scenario_list = []
             for indx, scn in enumerate(self.home_scenarios[home_id]):
                 scenario_list.append(scn['type'])

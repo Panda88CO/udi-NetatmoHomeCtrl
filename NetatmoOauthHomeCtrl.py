@@ -495,7 +495,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         logging.debug('get_home_status {} {}'.format(home['id'], home))
         try:
             if home:
-                home_id = str(list(home.keys())[0])
+                home_id = str(home['id'])
                 logging.debug('get_home_status {} {}'.format(home_id, home))
                 home_id_str = urllib.parse.quote_plus(home_id)
                 #if dev_type == '':

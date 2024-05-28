@@ -350,7 +350,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         elif scenario_id == 4:
             temp['scenario'] = 'bedtime'
         elif scenario_id  >= 5 and scenario_id <= 8:
-            temp['scenario'] = 'Custom_'+str(scenario_id)                                    
+            temp['scenario'] = 'custom_'+str(scenario_id)                                    
         data['home']['modules'].append(temp)
         res = self._callApi('POST', api_str, data )
         logging.debug('launch_scenario result: {} '.format(res))

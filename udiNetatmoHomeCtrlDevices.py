@@ -220,11 +220,11 @@ class udiNetatmoGateway(udi_interface.Node):
 
     def execute_scenario(self, command):
         #cmd = command#query = command.get("query")
-        #unit = command.get('uom')
+        #scenario = command.get('uom')
         indx = str(command.get('value'))
         if len(self.myNetatmo.home_scenarios[self.home_id]) >= indx:
-            scenario = self.myNetatmo.home_scenarios[self.home_id][indx]
-            self.myNetatmo.launch_scenario(self.home_id, self.module_id, scenario)
+            #scenario = self.myNetatmo.home_scenarios[self.home_id][indx]
+            self.myNetatmo.launch_scenario(self.home_id, self.module_id, indx)
         self.update_ISY_data()
 
     def update(self, command = None):

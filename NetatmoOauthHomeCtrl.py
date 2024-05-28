@@ -266,7 +266,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
             self.home_scenarios[home_id] = res['body']['home']['scenarios']
             scenario_list = []
             for indx, scn in enumerate(self.home_scenarios[home_id]):
-                scenario_list.append(scn['type'])
+                scenario_list.append(scn)
         return(scenario_list)
 
     def get_energy_kwh(self, home_id, module_id, interval_min=60):
@@ -332,8 +332,8 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         return(res)
 
 
-    def launch_scenario(self,  home_id, module_id, scenario):            
-        logging.debug('launch_scenario {} {} {}'.format(home_id, module_id, scenario))
+    def launch_scenario(self,  home_id, module_id, scenario_id):            
+        logging.debug('launch_scenario {} {} {}'.format(home_id, module_id, scenario_id))
         api_str = '/setstate'
         data = {}
         data['home'] = {}
@@ -341,15 +341,21 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         data['home']['modules'] = [] 
         temp = {} 
         temp['id'] = str(module_id)
-        if scenario in self.home_scenarios[home_id]:
-            temp['scenario'] = str(scenario)
-            data['home']['modules'].append(temp)
-            res = self._callApi('POST', api_str, data )
-            logging.debug('launch_scenario result: {} '.format(res)) 
-            return(res)        
-        else:
-            logging.error('Unknown scenario passed: {}'.format(scenario))
-            return(None)
+        if scenario_id == 1:
+            temp['scenario'] = 'home'
+        elif scenario_id == 2:
+            temp['scenario'] = 'away'
+        elif scenario_id == 3:
+            temp['scenario'] = 'wake_up'
+        elif scenario_id == 4:
+            temp['scenario'] = 'bedtime'
+        elif scenario_id  >= 5 and scenario_id <= 8:
+            temp['scenario'] = 'Custom_'+str(scenario_id)                                    
+        data['home']['modules'].append(temp)
+        res = self._callApi('POST', api_str, data )
+        logging.debug('launch_scenario result: {} '.format(res))
+        return(res)        
+
 
     def module_type (self, type):
         if type in self.gateway_list:

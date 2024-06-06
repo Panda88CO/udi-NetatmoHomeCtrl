@@ -47,7 +47,7 @@ class NetatmoController(udi_interface.Node):
         self.poly = polyglot
 
         self.id = 'controller'
-        self.drivers =  [ {'driver': 'ST', 'value':0, 'uom':25}, ]
+        #self.drivers =  [ {'driver': 'ST', 'value':0, 'uom':25}, ]
         self.accessTokenEn = True
         self.accessToken = None
         self.nodeDefineDone = False
@@ -65,7 +65,7 @@ class NetatmoController(udi_interface.Node):
         self.n_queue = []
         #logging.debug('drivers : {}'.format(self.drivers))
         self.poly.subscribe(self.poly.STOP, self.stopHandler)
-        self.poly.subscribe(self.poly.START, self.start, address)
+        #self.poly.subscribe(self.poly.START, self.start, address)
         self.poly.subscribe(self.poly.CUSTOMPARAMS, self.myNetatmo.customParamsHandler)
         #self.poly.subscribe(self.poly.CUSTOMDATA, self.myNetatmo.customDataHandler)
         self.poly.subscribe(self.poly.CUSTOMNS, self.myNetatmo.customNsHandler)
@@ -78,17 +78,17 @@ class NetatmoController(udi_interface.Node):
         self.home_list = []
         #logging.debug('testing 2')
 
-        self.poly.addNode(self)
+        #self.poly.addNode(self)
         #logging.debug('drivers : {}'.format(self.drivers))
         #logging.debug('testing 3')
         #self.wait_for_node_done()
         #logging.debug('testing 4')
-        self.node = self.poly.getNode(self.address)
+        #self.node = self.poly.getNode(self.address)
         #logging.debug('testing 5')
         self.nodes_in_db = self.poly.getNodesFromDb()
         self.poly.updateProfile()
         self.poly.ready()
-       
+        self.start()
 
        
 
@@ -238,11 +238,14 @@ class NetatmoController(udi_interface.Node):
         self.updateISYdrivers()
               
     def updateISYdrivers(self):
+        logging.debug('Do nothing')
+        '''
         try:
             self.node.setDriver('ST', 1, True, True)
         except Exception:
-            logging.error('eISY/Polisy aopears offline')
+            logging.error('eISY/Polisy appears offline')
             self.node.setDriver('ST', 0, True, True)
+        '''
 
     def updateEnergy(self):
         pass
@@ -273,7 +276,7 @@ class NetatmoController(udi_interface.Node):
                             nde.updateEnergy()
                                                 
                 if 'shortPoll' in polltype:
-                    self.heartbeat()
+                    #self.heartbeat()
                     #self.myNetatmo.refresh_token()
                     logging.debug('shortpoll  {}'.format(self.myNetatmo.homes_list))
                     for home_id in self.myNetatmo.homes_list:

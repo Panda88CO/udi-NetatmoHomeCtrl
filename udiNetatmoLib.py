@@ -72,7 +72,7 @@ def ISY2sp_mode (self, mode_nbr):
         mode_str = 'manual'
     elif mode_nbr == 2:
         mode_str = 'max'
-    elif mode_str == 1:
+    elif mode_nbr == 1:
         mode_str = 'home'
     else:
         mode_str = 'unknown'+str(mode_nbr)

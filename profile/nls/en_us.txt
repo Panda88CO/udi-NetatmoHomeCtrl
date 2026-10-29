@@ -53,12 +53,12 @@ CMD-npower-UPDATE-NAME = Force Update
 ND-light-NAME = Light Switch
 ND-light-ICON = Switch
 ST-nlight-ST-NAME = Connected
-ST-nlight-GV0-NAME = Statel 
+ST-nlight-GV0-NAME = State 
 ST-nlight-GV1-NAME = Brightness 
 
 CMD-nlight-UPDATE-NAME = Force Update 
 CMD-nlight-LIGHTCTRL-NAME = Set State
-CMD-nlight-LIGHTCTRL-NAME = Set Brightness
+CMD-nlight-BRIGHTCTRL-NAME = Set Brightness
 CMD-nlight-UPDATE-NAME = Force Update 
 
 ND-remote-NAME = Remote

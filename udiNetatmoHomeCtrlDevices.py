@@ -75,21 +75,28 @@ class udiNetatmoPower(udi_interface.Node):
         logging.debug('Power module data:')
         if self.node is not None:
             if self.myNetatmo.get_module_online(self.home_id, self.module_id):
-                self.NET_setDriver('ST',1)
+                self.NET_setDriver('ST', 1)
                 self.NET_setDriver('GV0', self.on_state2ISY(self.myNetatmo.get_state(self.home_id, self.module_id)))
-                self.NET_setDriver('GV1', int(-self.myNetatmo.get_power_used(self.home_id, self.module_id)),  33)
+                p_used = self.myNetatmo.get_power_used(self.home_id, self.module_id)
+                self.NET_setDriver('GV1', int(p_used) if p_used is not None else 0, 33)
+                kwh = self.myNetatmo.get_power_kwh(self.home_id, self.module_id)
+                if kwh is not None:
+                    self.NET_setDriver('GV2', kwh, 33)
                 
     def outlet_control(self, command):
         logging.debug('outlet_control called {}'.format(command))
-        on_off = int(command.get('value'))
+        val = command.get('value')
+        if val is None and 'query' in command:
+            val = command['query'].get('')
+        on_off = int(val) if val is not None else 0
         logging.debug('Command data : {}'.format(on_off == 1))
         if self.myNetatmo.set_state(self.home_id, self.module_id, on_off == 1):
-            self.NET_setDriver('GV0',on_off)
+            self.NET_setDriver('GV0', on_off)
         else:
             self.NET_setDriver('GV0', 99)
 
     def update(self, command = None):
-        self.myNetatmo.get_home_status(self._home['id'])
+        self.myNetatmo.get_home_status(self.home_id)
         self.update_ISY_data()       
 
 
@@ -151,11 +158,16 @@ class udiNetatmoRemote(udi_interface.Node):
                 self.NET_setDriver('GV2', round(self.myNetatmo.get_valve_bat_level(self.home_id, self.module_id)/1000, 2), 72)
                 self.NET_setDriver('GV0', self.battery2ISY(self.myNetatmo.get_valve_bat_state(self.home_id, self.module_id)))
 
+    def button_press(self):
+        logging.info(f'Remote {self.name} button pressed')
+        if self.node is not None:
+            self.reportCmd('DON', 1)
+
     def updateEnergy(self):
         pass
 
     def update(self, command = None):
-        self.myNetatmo.get_home_status(self._home['id'])
+        self.myNetatmo.get_home_status(self.home_id)
         self.update_ISY_data()
 
     commands = {        
@@ -219,16 +231,19 @@ class udiNetatmoGateway(udi_interface.Node):
 
 
     def execute_scenario(self, command):
-        #cmd = command#query = command.get("query")
-        #scenario = command.get('uom')
-        indx = str(command.get('value'))
-        if len(self.myNetatmo.home_scenarios[self.home_id]) >= indx:
-            #scenario = self.myNetatmo.home_scenarios[self.home_id][indx]
+        val = command.get('value')
+        if val is None and 'query' in command:
+            val = command['query'].get('')
+        try:
+            indx = int(val)
+        except (ValueError, TypeError):
+            indx = 0
+        if self.home_id in self.myNetatmo.home_scenarios and len(self.myNetatmo.home_scenarios[self.home_id]) > indx:
             self.myNetatmo.launch_scenario(self.home_id, self.module_id, indx)
         self.update_ISY_data()
 
     def update(self, command = None):
-        self.myNetatmo.get_home_status(self._home['id'])
+        self.myNetatmo.get_home_status(self.home_id)
         self.update_ISY_data()
 
     commands = {        
@@ -252,7 +267,7 @@ class udiNetatmoLights(udi_interface.Node):
         self.address = address
         self.name = name        
         self.n_queue = []
-        self.id = 'switch'
+        self.id = 'light'
         self.drivers = [
 
             {'driver' : 'GV0', 'value': 99, 'uom':25}, 
@@ -293,13 +308,19 @@ class udiNetatmoLights(udi_interface.Node):
         if self.node is not None:
             if self.myNetatmo.get_module_online(self.home_id, self.module_id):
                 self.NET_setDriver('ST',1)
-                self.NET_setDriver('GV0', self.os_state2ISY(self.myNetatmo.get_state(self.home_id, self.module_id)))
-                self.NET_setDriver('GV1', int(self.myNetatmo.get_brightness(self.home_id, self.module_id)),  51)
+                self.NET_setDriver('GV0', self.on_state2ISY(self.myNetatmo.get_state(self.home_id, self.module_id)))
+                brightness = self.myNetatmo.get_brightness(self.home_id, self.module_id)
+                self.NET_setDriver('GV1', int(brightness) if brightness is not None else 0, 51)
                 
     def brightness_control(self, command):
         logging.debug('brightness_control called {}'.format(command))
-
-        brightness = int(command.get('value'))
+        val = command.get('value')
+        if val is None and 'query' in command:
+            val = command['query'].get('Lbrightness')
+        try:
+            brightness = int(val)
+        except (ValueError, TypeError):
+            brightness = 0
         logging.debug('Command data : {}'.format(brightness))
         if self.myNetatmo.set_brightness(self.home_id, self.module_id, brightness):
             self.NET_setDriver('GV1', brightness)
@@ -308,15 +329,21 @@ class udiNetatmoLights(udi_interface.Node):
 
     def light_control(self, command):
         logging.debug('light_control called {}'.format(command))
-        on_off = int(command.get('value'))
+        val = command.get('value')
+        if val is None and 'query' in command:
+            val = command['query'].get('Lstate')
+        try:
+            on_off = int(val)
+        except (ValueError, TypeError):
+            on_off = 0
         logging.debug('Command data : {}'.format(on_off == 1))
         if self.myNetatmo.set_state(self.home_id, self.module_id, on_off == 1):
-            self.NET_setDriver('GV0',on_off == 1)
+            self.NET_setDriver('GV0', on_off)
         else:
             self.NET_setDriver('GV0', 99)
 
     def update(self, command = None):
-        self.myNetatmo.get_home_status(self._home['id'])
+        self.myNetatmo.get_home_status(self.home_id)
         self.update_ISY_data()
 
     commands = {        

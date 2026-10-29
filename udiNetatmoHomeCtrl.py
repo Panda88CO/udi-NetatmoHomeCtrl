@@ -47,7 +47,7 @@ class NetatmoController(udi_interface.Node):
         self.poly = polyglot
 
         self.id = 'controller'
-        #self.drivers =  [ {'driver': 'ST', 'value':0, 'uom':25}, ]
+        self.drivers = [{'driver': 'ST', 'value': 0, 'uom': 25}]
         self.accessTokenEn = True
         self.accessToken = None
         self.nodeDefineDone = False
@@ -58,33 +58,25 @@ class NetatmoController(udi_interface.Node):
         self.temp_unit = 0
         self.nodes_in_db = self.poly.getNodesFromDb()
         self.myNetatmo = NetatmoOauthHomeCtrl(self.poly, 'read_magellan write_magellan read_smarther write_smarther read_mhs1 write_mhs1')
-        self.hb  = 0
-        #logging.debug('testing 1')
-        #self.customParameters = Custom(self.poly, 'customparams')
+        self.hb = 0
+        self.webhook_registered = False
         self.Notices = Custom(self.poly, 'notices')
         self.n_queue = []
-        #logging.debug('drivers : {}'.format(self.drivers))
+
         self.poly.subscribe(self.poly.STOP, self.stopHandler)
-        #self.poly.subscribe(self.poly.START, self.start, address)
         self.poly.subscribe(self.poly.CUSTOMPARAMS, self.myNetatmo.customParamsHandler)
-        #self.poly.subscribe(self.poly.CUSTOMDATA, self.myNetatmo.customDataHandler)
+        self.poly.subscribe(self.poly.CUSTOMDATA, self.myNetatmo.customDataHandler)
         self.poly.subscribe(self.poly.CUSTOMNS, self.myNetatmo.customNsHandler)
         self.poly.subscribe(self.poly.OAUTH, self.myNetatmo.oauthHandler)
         self.poly.subscribe(self.poly.CONFIGDONE, self.configDoneHandler)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
         self.poly.subscribe(self.poly.POLL, self.systemPoll)
-
+        self.poly.subscribe(self.poly.WEBHOOK, self.webhookHandler)
 
         self.home_list = []
-        #logging.debug('testing 2')
 
-        #self.poly.addNode(self)
-        #logging.debug('drivers : {}'.format(self.drivers))
-        #logging.debug('testing 3')
-        #self.wait_for_node_done()
-        #logging.debug('testing 4')
-        #self.node = self.poly.getNode(self.address)
-        #logging.debug('testing 5')
+        self.poly.addNode(self)
+        self.node = self.poly.getNode(self.address)
         self.nodes_in_db = self.poly.getNodesFromDb()
         self.poly.updateProfile()
         self.poly.ready()
@@ -150,6 +142,32 @@ class NetatmoController(udi_interface.Node):
         self.wait_for_node_done()
         self.poly.updateProfile()
 
+        # Setup webhook listener
+        try:
+            self.poly.webhookStart({"name": "NetatmoHomeCtrl"})
+            logging.info("Webhook service started on portal")
+        except Exception as e:
+            logging.warning(f"Could not start webhook service on portal: {e}")
+
+        # Check for configured or auto-detected webhook URL
+        webhook_url = self.myNetatmo.customParameters.get('WEBHOOK_URL')
+        if not webhook_url:
+            uuid = getattr(self.poly, 'uuid', None)
+            profile_num = getattr(self.poly, 'profileNum', None)
+            if uuid and profile_num:
+                webhook_url = f"https://my.isy.io/api/eisy/pg3/webhook/noresponse/{uuid}/{profile_num}"
+
+        if webhook_url and webhook_url.startswith("https://"):
+            logging.info(f"Registering webhook URL with Netatmo: {webhook_url}")
+            res = self.myNetatmo.add_webhook(webhook_url)
+            if res and res.get('status') == 'ok':
+                self.webhook_registered = True
+                logging.info("Netatmo webhook successfully registered")
+            else:
+                logging.warning(f"Netatmo add_webhook returned: {res}")
+        else:
+            logging.info("No valid HTTPS WEBHOOK_URL available; operating in polling mode")
+
 
     def addNodes(self):        
         logging.info('Adding rooms of selected homes')
@@ -185,7 +203,7 @@ class NetatmoController(udi_interface.Node):
                             temp = udiNetatmoHomeCtrlRoom(self.poly, node_address, node_address, node_name,  self.myNetatmo, home, room['id'])
                         node_adr_list.append(node_address)
                         while not temp.node_ready:
-                            logging.debug( 'Waiting for node {}-{} to be ready'.format(self.home_id, node_name))
+                            logging.debug( 'Waiting for node {}-{} to be ready'.format(home_name, node_name))
                             time.sleep(1)
             
         #removing unused nodes
@@ -238,17 +256,68 @@ class NetatmoController(udi_interface.Node):
         self.updateISYdrivers()
               
     def updateISYdrivers(self):
-        logging.debug('Do nothing')
-        '''
         try:
-            self.node.setDriver('ST', 1, True, True)
-        except Exception:
-            logging.error('eISY/Polisy appears offline')
-            self.node.setDriver('ST', 0, True, True)
-        '''
+            if self.node is not None:
+                self.node.setDriver('ST', 1, True, True)
+        except Exception as e:
+            logging.error(f'eISY/Polisy appears offline: {e}')
+            if self.node is not None:
+                self.node.setDriver('ST', 0, True, True)
 
     def updateEnergy(self):
         pass
+
+    def webhookHandler(self, data):
+        logging.info(f"Webhook event received: {data}")
+        try:
+            payload = data
+            if isinstance(data, str):
+                import json
+                payload = json.loads(data)
+            elif isinstance(data, dict) and 'body' in data:
+                if isinstance(data['body'], str):
+                    import json
+                    payload = json.loads(data['body'])
+                elif isinstance(data['body'], dict):
+                    payload = data['body']
+
+            if not isinstance(payload, dict):
+                return
+
+            push_type = payload.get('push_type')
+            event_type = payload.get('event_type')
+            home_id = payload.get('home_id')
+            module_id = payload.get('module_id') or payload.get('device_id')
+
+            logging.info(f"Parsed webhook event: push_type={push_type}, event_type={event_type}, module_id={module_id}")
+
+            # 1. Device event (e.g. NLT wireless switch/remote press)
+            if push_type == 'device_event':
+                for node in self.poly.nodes():
+                    if hasattr(node, 'module_id') and node.module_id == module_id:
+                        if hasattr(node, 'button_press'):
+                            node.button_press()
+                if home_id:
+                    self.myNetatmo.get_home_status(home_id)
+                    self.update_ISY_data()
+
+            # 2. State change (e.g. light switch or outlet toggled)
+            elif push_type == 'home_status' or event_type == 'status':
+                if 'data' in payload and 'modules' in payload['data']:
+                    for mod in payload['data']['modules']:
+                        mod_id = mod.get('id')
+                        for node in self.poly.nodes():
+                            if hasattr(node, 'module_id') and node.module_id == mod_id:
+                                if home_id and home_id in self.myNetatmo.home_data:
+                                    if 'modules' in self.myNetatmo.home_data[home_id] and mod_id in self.myNetatmo.home_data[home_id]['modules']:
+                                        self.myNetatmo.home_data[home_id]['modules'][mod_id].update(mod)
+                                node.updateISYdrivers()
+                elif home_id:
+                    self.myNetatmo.get_home_status(home_id)
+                    self.update_ISY_data()
+
+        except Exception as e:
+            logging.error(f"Error handling webhook data: {e}")
 
     def systemPoll (self, polltype):
         #if self.nodeDefineDone:
@@ -295,6 +364,12 @@ class NetatmoController(udi_interface.Node):
  
 
     def stopHandler(self):
+        logging.info("Stopping Netatmo Controller NodeServer")
+        if getattr(self, 'webhook_registered', False):
+            try:
+                self.myNetatmo.drop_webhook()
+            except Exception as e:
+                logging.error(f"Error dropping webhook: {e}")
         # Set nodes offline
         for node in self.poly.nodes():
             if hasattr(node, 'setOffline'):
@@ -310,7 +385,7 @@ if __name__ == "__main__":
     try:
         logging.info ('starting')
         logging.info('Starting Netatmo Controller')
-        polyglot = udi_interface.Interface([])
+        polyglot = udi_interface.Interface([], {"enableWebhook": True})
         #polyglot.start('0.2.31')
 
         polyglot.start({ 'version': version, 'requestId': True })

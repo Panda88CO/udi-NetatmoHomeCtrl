@@ -145,7 +145,7 @@ class udiNetatmoHomeCtrlRoom(udi_interface.Node):
                 
     def update(self, command = None):
         logging.debug('update room data {}'.format(self._home))
-        self.myNetatmo.get_home_status(self._home['id'])
+        self.myNetatmo.get_home_status(self.home_id)
         #self.myNetatmo.update_weather_info_instant(self.module['home_id'])
         self.update_ISY_data()
 
@@ -337,7 +337,7 @@ class udiNetatmoEnergyRoom(udi_interface.Node):
                 
     def update(self, command = None):
         logging.debug('update room data {}'.format(self._home))
-        self.myNetatmo.get_home_status(self._home['id'])
+        self.myNetatmo.get_home_status(self.home_id)
         #self.myNetatmo.update_weather_info_instant(self.module['home_id'])
         self.update_ISY_data()
 

@@ -121,7 +121,7 @@ class NetatmoCloud(OAuth):
         self.customParameters.load(userParams)
         logging.debug('customParamsHandler called {}'.format(userParams))
         client_ok = False
-        client_secret = False
+        secret_ok = False
         oauthSettingsUpdate = {}
         # Example for a boolean field
 
@@ -131,7 +131,7 @@ class NetatmoCloud(OAuth):
                 oauthSettingsUpdate['client_id'] = self.customParameters['clientID']
                 client_ok = True
         else:
-            logging.warnig('No clientID found')
+            logging.warning('No clientID found')
             self.customParameters['clientID'] = 'enter client_id'
             self.client_ID = None
             
@@ -141,7 +141,7 @@ class NetatmoCloud(OAuth):
                 oauthSettingsUpdate['client_secret'] = self.customParameters['clientSecret']
                 secret_ok = True
         else:
-            logging.warnig('No clientSecret found')
+            logging.warning('No clientSecret found')
             self.customParameters['clientSecret'] = 'enter client_secret'
             self.client_SECRET = None
 

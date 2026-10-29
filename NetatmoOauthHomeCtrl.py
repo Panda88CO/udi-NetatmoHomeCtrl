@@ -131,7 +131,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         self.customParameters.load(userParams)
         logging.debug('customParamsHandler called {}'.format(userParams))
         client_ok = False
-        client_secret = False
+        secret_ok = False
         oauthSettingsUpdate = {}
         # Example for a boolean field
 
@@ -141,7 +141,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
                 oauthSettingsUpdate['client_id'] = self.customParameters['clientID']
                 client_ok = True
         else:
-            logging.warnig('No clientID found')
+            logging.warning('No clientID found')
             self.customParameters['clientID'] = 'enter client_id'
             self.client_ID = None
             
@@ -151,7 +151,7 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
                 oauthSettingsUpdate['client_secret'] = self.customParameters['clientSecret']
                 secret_ok = True
         else:
-            logging.warnig('No clientSecret found')
+            logging.warning('No clientSecret found')
             self.customParameters['clientSecret'] = 'enter client_secret'
             self.client_SECRET = None
 
@@ -269,16 +269,68 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
                 scenario_list.append(scn)
         return(scenario_list)
 
+    def add_webhook(self, webhook_url):
+        '''Registers webhook callback with Netatmo API'''
+        logging.info(f'Registering Netatmo webhook: {webhook_url}')
+        try:
+            url_str = urllib.parse.quote_plus(webhook_url)
+            api_str = f'/addwebhook?url={url_str}&app_type=app_control'
+            res = self._callApi('POST', api_str)
+            logging.info(f'addwebhook result: {res}')
+            return res
+        except Exception as e:
+            logging.error(f'Failed to add webhook: {e}')
+            return None
+
+    def drop_webhook(self):
+        '''Drops webhook callback with Netatmo API'''
+        logging.info('Dropping Netatmo webhook')
+        try:
+            api_str = '/dropwebhook?app_type=app_control'
+            res = self._callApi('POST', api_str)
+            logging.info(f'dropwebhook result: {res}')
+            return res
+        except Exception as e:
+            logging.error(f'Failed to drop webhook: {e}')
+            return None
+
     def get_energy_kwh(self, home_id, module_id, interval_min=60):
         logging.debug('get_energy_kwh {} {} {}'.format(home_id, module_id, interval_min))
-        time_now = int(time.time())
-        time_start = time_now - 48*interval_min*60
-        gatway_id = self.home_data[home_id]['modules'][module_id]['bridge']
-        gateway_id_str = urllib.parse.quote_plus(gatway_id)
-        module_id_str = urllib.parse.quote_plus(module_id)
-        api_str = '/getmeasure?device_id='+gateway_id_str+'&module_id='+module_id_str+'&type=sum_energy_elec&scale=30min&date_begin='+str(time_start)+'&date_end='+str(time_now)
-        temp = self._callApi('GET', api_str )
-        logging.debug('get_energy_kwh result: {} '.format(temp))
+        try:
+            time_now = int(time.time())
+            time_start = time_now - 48*interval_min*60
+            if home_id not in self.home_data or 'modules' not in self.home_data[home_id]:
+                return None
+            if module_id not in self.home_data[home_id]['modules']:
+                return None
+            gatway_id = self.home_data[home_id]['modules'][module_id].get('bridge')
+            if not gatway_id:
+                return None
+            gateway_id_str = urllib.parse.quote_plus(gatway_id)
+            module_id_str = urllib.parse.quote_plus(module_id)
+            api_str = '/getmeasure?device_id='+gateway_id_str+'&module_id='+module_id_str+'&type=sum_energy_elec&scale=30min&date_begin='+str(time_start)+'&date_end='+str(time_now)
+            temp = self._callApi('GET', api_str)
+            logging.debug('get_energy_kwh result: {} '.format(temp))
+            if temp and 'body' in temp:
+                body = temp['body']
+                if isinstance(body, dict) and len(body) > 0:
+                    last_val = list(body.values())[-1]
+                    if isinstance(last_val, list) and len(last_val) > 0:
+                        val = last_val[0]
+                        if val is not None:
+                            kwh = round(float(val) / 1000.0, 2)
+                            self.home_data[home_id]['modules'][module_id]['energy_kwh'] = kwh
+                            return kwh
+            return None
+        except Exception as e:
+            logging.error(f'Error getting energy kwh: {e}')
+            return None
+
+    def get_power_kwh(self, home_id, module_id):
+        try:
+            return self.home_data[home_id]['modules'][module_id].get('energy_kwh')
+        except Exception:
+            return None
 
     def isControlDevice(self, home, module_address):
         logging.debug('isControlDevice {} - {}'.format(module_address, home ))
@@ -291,68 +343,84 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
         else:
             return(False)
             
-    def set_brightness(self, home_id, module_id, brightness_pct ):
+    def set_brightness(self, home_id, module_id, brightness_pct):
         logging.debug('set_brightness {} {} {}'.format(home_id, module_id, brightness_pct))
-        gateway_id = self.home_data[home_id]['modules'][module_id]['bridge']
+        gateway_id = None
+        if home_id in self.home_data and 'modules' in self.home_data[home_id] and module_id in self.home_data[home_id]['modules']:
+            gateway_id = self.home_data[home_id]['modules'][module_id].get('bridge')
         api_str = '/setstate'
-        data = {}
-        data['home'] = {}
-        data['home']['id'] = str(home_id)
-        data['home']['modules'] = [] 
-        temp = {} 
-        temp['id'] = str(module_id)
-        temp['bridge'] = str(gateway_id)
-        data['home']['modules'].append({'id':str(module_id)})       
-        data['home']['modules'].append({'bridge':str(gateway_id)})  
-        if brightness_pct >= 0 and brightness_pct <= 100:
-            temp['brightness'] = int(brightness_pct)
-        data['home']['modules'].append(temp)
-        res = self._callApi('POST', api_str, data )
+        data = {
+            'home': {
+                'id': str(home_id),
+                'modules': []
+            }
+        }
+        mod_data = {'id': str(module_id)}
+        if gateway_id:
+            mod_data['bridge'] = str(gateway_id)
+        if 0 <= brightness_pct <= 100:
+            mod_data['brightness'] = int(brightness_pct)
+        data['home']['modules'].append(mod_data)
+        res = self._callApi('POST', api_str, data)
         logging.debug('set_brightness result: {} '.format(res))
         return(res)
 
-    def set_state(self,  home_id, module_id, state):
+    def set_state(self, home_id, module_id, state):
         logging.debug('set_state {} {} {}'.format(home_id, module_id, state))
-        gateway_id = self.home_data[home_id]['modules'][module_id]['bridge']
+        gateway_id = None
+        if home_id in self.home_data and 'modules' in self.home_data[home_id] and module_id in self.home_data[home_id]['modules']:
+            gateway_id = self.home_data[home_id]['modules'][module_id].get('bridge')
         api_str = '/setstate'
-        data = {}
-        data['home'] = {}
-        data['home']['id'] = str(home_id)
-        data['home']['modules'] = []
-        temp = {} 
-        temp['id'] = str(module_id)
-        temp['bridge'] = str(gateway_id)
+        data = {
+            'home': {
+                'id': str(home_id),
+                'modules': []
+            }
+        }
+        mod_data = {'id': str(module_id)}
+        if gateway_id:
+            mod_data['bridge'] = str(gateway_id)
         if isinstance(state, str):
-            temp['on'] = state.lower() == 'on'
-        if isinstance(state, bool):
-            temp['on'] = state
-        data['home']['modules'].append(temp)
-        res = self._callApi('POST', api_str, data )
+            mod_data['on'] = state.lower() in ('on', 'true', '1')
+        elif isinstance(state, bool):
+            mod_data['on'] = state
+        elif isinstance(state, (int, float)):
+            mod_data['on'] = bool(state)
+        data['home']['modules'].append(mod_data)
+        res = self._callApi('POST', api_str, data)
         logging.debug('set_state result: {} '.format(res))
         return(res)
 
-
-    def launch_scenario(self,  home_id, module_id, scenario_id):            
+    def launch_scenario(self, home_id, module_id, scenario_id):            
         logging.debug('launch_scenario {} {} {}'.format(home_id, module_id, scenario_id))
         api_str = '/setstate'
-        data = {}
-        data['home'] = {}
-        data['home']['id'] = str(home_id)
-        data['home']['modules'] = [] 
-        temp = {} 
-        temp['id'] = str(module_id)
-        if scenario_id == 1:
+        data = {
+            'home': {
+                'id': str(home_id),
+                'modules': []
+            }
+        }
+        temp = {'id': str(module_id)}
+        try:
+            scenario_int = int(scenario_id)
+        except (ValueError, TypeError):
+            scenario_int = -1
+
+        if scenario_int == 0 or scenario_id == 'home':
             temp['scenario'] = 'home'
-        elif scenario_id == 2:
+        elif scenario_int == 1 or scenario_id == 'away':
             temp['scenario'] = 'away'
-        elif scenario_id == 3:
+        elif scenario_int == 2 or scenario_id == 'wake_up':
             temp['scenario'] = 'wake_up'
-        elif scenario_id == 4:
+        elif scenario_int == 3 or scenario_id == 'bedtime':
             temp['scenario'] = 'bedtime'
-        elif scenario_id  >= 5 and scenario_id <= 8:
-            temp['scenario'] = 'custom_'+str(scenario_id)                                    
+        elif 4 <= scenario_int <= 7:
+            temp['scenario'] = f'custom_{scenario_int - 3}'
+        elif isinstance(scenario_id, str):
+            temp['scenario'] = scenario_id
+
         data['home']['modules'].append(temp)
-        res = self._callApi('POST', api_str, data )
+        res = self._callApi('POST', api_str, data)
         logging.debug('launch_scenario result: {} '.format(res))
         return(res)        
 
@@ -498,13 +566,15 @@ class NetatmoOauthHomeCtrl(NetatmoCloud):
 
     def get_home_status(self, home):
         status = {}
-        logging.debug('get_home_status {} {}'.format(home['id'], home))
+        logging.debug('get_home_status {}'.format(home))
         try:
             if home:
-                home_id = str(home['id'])
-                logging.debug('get_home_status {} {}'.format(home_id, home))
+                if isinstance(home, dict):
+                    home_id = str(home.get('id', ''))
+                else:
+                    home_id = str(home)
+                logging.debug('get_home_status home_id: {}'.format(home_id))
                 home_id_str = urllib.parse.quote_plus(home_id)
-                #if dev_type == '':
                 api_str = '/homestatus?home_id='+str(home_id_str)
                 #else:
                 #    api_str = '/homestatus?home_id='+str(home_id_str)+'&'+str(dev_type)
